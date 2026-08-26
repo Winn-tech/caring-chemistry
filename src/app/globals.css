@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50:  #f8f6f9;
+  --color-primary-100: #efeaf0;
+  --color-primary-200: #dcd3df;
+  --color-primary-300: #c2b3c7;
+  --color-primary-400: #9d84a4;
+  --color-primary-500: #765d7d;
+  --color-primary-600: #654c6b;
+  --color-primary-700: #523d57;
+  --color-primary-800: #3f2d43;
+  --color-primary-900: #2e2032;
+  --color-primary-950: #1b111d;
+
+  --color-accent-50:  #fbf3ec;
+  --color-accent-100: #f6e3d2;
+  --color-accent-200: #eac4a3;
+  --color-accent-300: #dda374;
+  --color-accent-400: #d18f52;
+  --color-accent-500: #c88041;
+  --color-accent-600: #a8672f;
+  --color-accent-700: #875127;
+  --color-accent-800: #663d1e;
+  --color-accent-900: #4a2c16;
+  --color-accent-950: #2b190c;
+}
+@theme {
+  --font-display: var(--font-display);
+  --font-accent: var(--font-accent);
+  --font-body: var(--font-body);
+}
+
+@keyframes announcement-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-announcement-scroll {
+  animation: announcement-scroll linear infinite;
+}

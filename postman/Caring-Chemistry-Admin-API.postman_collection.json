@@ -1,0 +1,19 @@
+{
+  "info": { "name": "Caring Chemistry Admin API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }, { "key": "token", "value": "" }, { "key": "categoryId", "value": "" }, { "key": "productId", "value": "" }],
+  "item": [
+    { "name": "Login", "request": { "method": "POST", 
+    "header": [{ "key": "Content-Type", "value": "application/json" }], 
+    "url": "{{baseUrl}}/api/v1/auth/login", 
+    "body": { "mode": "raw", 
+    "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"ChangeThisAdminPassword123!\"\n}" } }, 
+    "event": [{ "listen": "test", "script": { "exec": ["pm.environment.set('token', pm.response.json().data.token);"] } }]
+   },
+    { "name": "Create category (Sales / General)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/categories", "body": { "mode": "raw", "raw": "{ \"name\": \"Serums\", \"slug\": \"serums\" }" } } },
+    { "name": "Create staff account (General only)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/admin/staff", "body": { "mode": "raw", "raw": "{ \"name\": \"Sales Team\", \"email\": \"sales@example.com\", \"password\": \"ChangeThisSalesPassword123!\", \"role\": \"SALES_TEAM\" }" } } },
+    { "name": "Read audit logs (General only)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/v1/admin/audit-logs?limit=50" } },
+    { "name": "List paid orders (Sales / General)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/v1/orders?paymentStatus=PAID" } },
+    { "name": "List abandoned carts (Sales / General)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/v1/carts?status=ABANDONED" } },
+    { "name": "Create blog post (Social / General)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/blog/posts", "body": { "mode": "raw", "raw": "{ \"title\": \"Skin barrier 101\", \"slug\": \"skin-barrier-101\", \"content\": \"A complete, calm introduction to caring for your skin barrier.\", \"status\": \"DRAFT\" }" } } }
+  ]
+}
