@@ -1,4 +1,4 @@
-import { ProductStatus, Role } from "@/generated/prisma/client";
+import { ProductBadge, ProductStatus, Role } from "@/generated/prisma/client";
 import { z } from "zod";
 import { errorResponse, ok } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
@@ -17,9 +17,14 @@ const schema = z.object({
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   description: z.string().max(8000).optional(),
   price: z.number().positive().max(99999999),
+  compareAtPrice: z.number().positive().max(99999999).optional(),
   currency: z.string().length(3).default("NGN"),
   stock: z.number().int().min(0),
   status: z.nativeEnum(ProductStatus).default(ProductStatus.DRAFT),
+  badge: z.nativeEnum(ProductBadge).optional(),
+  rating: z.number().min(0).max(5).optional(),
+  reviewCount: z.number().int().min(0).default(0),
+  isBestSeller: z.boolean().default(false),
   categoryId: z.string().cuid(),
   images: z.array(image).max(10).optional(),
 });
@@ -30,12 +35,16 @@ export async function GET(request: Request) {
 
     const q = new URL(request.url).searchParams;
     const status = q.get("status") as ProductStatus | null;
+    const bestSellerParam = q.get("isBestSeller");
 
     return ok(
       await prisma.product.findMany({
         where: {
           deletedAt: null,
           ...(status ? { status } : {}),
+          ...(bestSellerParam !== null
+            ? { isBestSeller: bestSellerParam === "true" }
+            : {}),
         },
         include: {
           category: true,

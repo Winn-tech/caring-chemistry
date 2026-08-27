@@ -41,7 +41,7 @@ export type AnnouncementBarMinAggregateOutputType = {
   speed: number | null
   background: string | null
   textColor: string | null
-  direction: string | null
+  direction: $Enums.AnnouncementDirection | null
   link: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,7 +54,7 @@ export type AnnouncementBarMaxAggregateOutputType = {
   speed: number | null
   background: string | null
   textColor: string | null
-  direction: string | null
+  direction: $Enums.AnnouncementDirection | null
   link: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -216,7 +216,7 @@ export type AnnouncementBarGroupByOutputType = {
   speed: number
   background: string
   textColor: string
-  direction: string
+  direction: $Enums.AnnouncementDirection
   link: string | null
   createdAt: Date
   updatedAt: Date
@@ -252,7 +252,7 @@ export type AnnouncementBarWhereInput = {
   speed?: Prisma.IntFilter<"AnnouncementBar"> | number
   background?: Prisma.StringFilter<"AnnouncementBar"> | string
   textColor?: Prisma.StringFilter<"AnnouncementBar"> | string
-  direction?: Prisma.StringFilter<"AnnouncementBar"> | string
+  direction?: Prisma.EnumAnnouncementDirectionFilter<"AnnouncementBar"> | $Enums.AnnouncementDirection
   link?: Prisma.StringNullableFilter<"AnnouncementBar"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AnnouncementBar"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AnnouncementBar"> | Date | string
@@ -281,7 +281,7 @@ export type AnnouncementBarWhereUniqueInput = Prisma.AtLeast<{
   speed?: Prisma.IntFilter<"AnnouncementBar"> | number
   background?: Prisma.StringFilter<"AnnouncementBar"> | string
   textColor?: Prisma.StringFilter<"AnnouncementBar"> | string
-  direction?: Prisma.StringFilter<"AnnouncementBar"> | string
+  direction?: Prisma.EnumAnnouncementDirectionFilter<"AnnouncementBar"> | $Enums.AnnouncementDirection
   link?: Prisma.StringNullableFilter<"AnnouncementBar"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AnnouncementBar"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AnnouncementBar"> | Date | string
@@ -315,33 +315,33 @@ export type AnnouncementBarScalarWhereWithAggregatesInput = {
   speed?: Prisma.IntWithAggregatesFilter<"AnnouncementBar"> | number
   background?: Prisma.StringWithAggregatesFilter<"AnnouncementBar"> | string
   textColor?: Prisma.StringWithAggregatesFilter<"AnnouncementBar"> | string
-  direction?: Prisma.StringWithAggregatesFilter<"AnnouncementBar"> | string
+  direction?: Prisma.EnumAnnouncementDirectionWithAggregatesFilter<"AnnouncementBar"> | $Enums.AnnouncementDirection
   link?: Prisma.StringNullableWithAggregatesFilter<"AnnouncementBar"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AnnouncementBar"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AnnouncementBar"> | Date | string
 }
 
 export type AnnouncementBarCreateInput = {
-  id?: string
+  id: string
   isActive?: boolean
   content: string
   speed?: number
   background?: string
   textColor?: string
-  direction?: string
+  direction?: $Enums.AnnouncementDirection
   link?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type AnnouncementBarUncheckedCreateInput = {
-  id?: string
+  id: string
   isActive?: boolean
   content: string
   speed?: number
   background?: string
   textColor?: string
-  direction?: string
+  direction?: $Enums.AnnouncementDirection
   link?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -354,7 +354,7 @@ export type AnnouncementBarUpdateInput = {
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   background?: Prisma.StringFieldUpdateOperationsInput | string
   textColor?: Prisma.StringFieldUpdateOperationsInput | string
-  direction?: Prisma.StringFieldUpdateOperationsInput | string
+  direction?: Prisma.EnumAnnouncementDirectionFieldUpdateOperationsInput | $Enums.AnnouncementDirection
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -367,20 +367,20 @@ export type AnnouncementBarUncheckedUpdateInput = {
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   background?: Prisma.StringFieldUpdateOperationsInput | string
   textColor?: Prisma.StringFieldUpdateOperationsInput | string
-  direction?: Prisma.StringFieldUpdateOperationsInput | string
+  direction?: Prisma.EnumAnnouncementDirectionFieldUpdateOperationsInput | $Enums.AnnouncementDirection
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AnnouncementBarCreateManyInput = {
-  id?: string
+  id: string
   isActive?: boolean
   content: string
   speed?: number
   background?: string
   textColor?: string
-  direction?: string
+  direction?: $Enums.AnnouncementDirection
   link?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -393,7 +393,7 @@ export type AnnouncementBarUpdateManyMutationInput = {
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   background?: Prisma.StringFieldUpdateOperationsInput | string
   textColor?: Prisma.StringFieldUpdateOperationsInput | string
-  direction?: Prisma.StringFieldUpdateOperationsInput | string
+  direction?: Prisma.EnumAnnouncementDirectionFieldUpdateOperationsInput | $Enums.AnnouncementDirection
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,7 +406,7 @@ export type AnnouncementBarUncheckedUpdateManyInput = {
   speed?: Prisma.IntFieldUpdateOperationsInput | number
   background?: Prisma.StringFieldUpdateOperationsInput | string
   textColor?: Prisma.StringFieldUpdateOperationsInput | string
-  direction?: Prisma.StringFieldUpdateOperationsInput | string
+  direction?: Prisma.EnumAnnouncementDirectionFieldUpdateOperationsInput | $Enums.AnnouncementDirection
   link?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -457,6 +457,10 @@ export type AnnouncementBarMinOrderByAggregateInput = {
 
 export type AnnouncementBarSumOrderByAggregateInput = {
   speed?: Prisma.SortOrder
+}
+
+export type EnumAnnouncementDirectionFieldUpdateOperationsInput = {
+  set?: $Enums.AnnouncementDirection
 }
 
 
@@ -525,7 +529,7 @@ export type $AnnouncementBarPayload<ExtArgs extends runtime.Types.Extensions.Int
     speed: number
     background: string
     textColor: string
-    direction: string
+    direction: $Enums.AnnouncementDirection
     link: string | null
     createdAt: Date
     updatedAt: Date
@@ -958,7 +962,7 @@ export interface AnnouncementBarFieldRefs {
   readonly speed: Prisma.FieldRef<"AnnouncementBar", 'Int'>
   readonly background: Prisma.FieldRef<"AnnouncementBar", 'String'>
   readonly textColor: Prisma.FieldRef<"AnnouncementBar", 'String'>
-  readonly direction: Prisma.FieldRef<"AnnouncementBar", 'String'>
+  readonly direction: Prisma.FieldRef<"AnnouncementBar", 'AnnouncementDirection'>
   readonly link: Prisma.FieldRef<"AnnouncementBar", 'String'>
   readonly createdAt: Prisma.FieldRef<"AnnouncementBar", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AnnouncementBar", 'DateTime'>

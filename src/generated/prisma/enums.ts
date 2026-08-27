@@ -67,3 +67,19 @@ export const PostStatus = {
 } as const
 
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
+
+
+export const ProductBadge = {
+  NEW: 'NEW',
+  BESTSELLER: 'BESTSELLER'
+} as const
+
+export type ProductBadge = (typeof ProductBadge)[keyof typeof ProductBadge]
+
+
+export const AnnouncementDirection = {
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT'
+} as const
+
+export type AnnouncementDirection = (typeof AnnouncementDirection)[keyof typeof AnnouncementDirection]

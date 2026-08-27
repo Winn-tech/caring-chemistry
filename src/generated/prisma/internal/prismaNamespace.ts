@@ -1386,9 +1386,14 @@ export const ProductScalarFieldEnum = {
   slug: 'slug',
   description: 'description',
   price: 'price',
+  compareAtPrice: 'compareAtPrice',
   currency: 'currency',
   stock: 'stock',
   status: 'status',
+  badge: 'badge',
+  rating: 'rating',
+  reviewCount: 'reviewCount',
+  isBestSeller: 'isBestSeller',
   categoryId: 'categoryId',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
@@ -1658,6 +1663,20 @@ export type ListEnumProductStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'ProductBadge'
+ */
+export type EnumProductBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductBadge'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductBadge[]'
+ */
+export type ListEnumProductBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductBadge[]'>
+    
+
+
+/**
  * Reference to a field of type 'CartStatus'
  */
 export type EnumCartStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CartStatus'>
@@ -1724,6 +1743,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'AnnouncementDirection'
+ */
+export type EnumAnnouncementDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnnouncementDirection'>
+    
+
+
+/**
+ * Reference to a field of type 'AnnouncementDirection[]'
+ */
+export type ListEnumAnnouncementDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnnouncementDirection[]'>
     
 
 
