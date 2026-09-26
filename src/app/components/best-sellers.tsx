@@ -12,6 +12,7 @@ interface BestSellerProduct {
   id: string;
   name: string;
   slug: string;
+  description: string | null;
   price: number;
   compareAtPrice: number | null;
   currency: string;
@@ -20,14 +21,6 @@ interface BestSellerProduct {
   reviewCount: number;
   imageUrl: string | null;
   imageAlt: string;
-}
-
-function formatPrice(amount: number, currency: string) {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
 }
 
 export function BestSellers() {
@@ -63,7 +56,7 @@ export function BestSellers() {
   };
 
   return (
-    <section className="bg-[#F7F3EF] py-24">
+    <section id="best-sellers" className="scroll-mt-20 bg-[#F7F3EF] py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -134,8 +127,12 @@ export function BestSellers() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="group w-[280px] flex-none snap-start"
+                  className="group w-[280px] flex-none snap-start "
                 >
+                  <Link
+                    href={`/product/${product.slug}`}
+                    className="block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-4 focus-visible:ring-offset-[#F7F3EF]"
+                  >
                   <div className="relative overflow-hidden rounded-2xl bg-primary-100">
                     <div className="relative aspect-[4/5] w-full">
                       {product.imageUrl ? (
@@ -157,12 +154,13 @@ export function BestSellers() {
                       </span>
                     )}
 
-                    <Link
-                      href={`/product/${product.slug}`}
+                    {/* Visual cue only: the whole card is the link. */}
+                    <span
+                      aria-hidden="true"
                       className="absolute inset-x-3 bottom-3 translate-y-12 rounded-full bg-white/95 py-2.5 text-center text-sm font-semibold text-primary-950 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
                     >
-                      Quick Add
-                    </Link>
+                      View product
+                    </span>
                   </div>
 
                   <div className="mt-4">
@@ -170,24 +168,20 @@ export function BestSellers() {
                       <div className="flex items-center gap-1 text-accent-500">
                         <Star size={14} fill="currentColor" strokeWidth={0} />
                         <span className="text-xs font-medium text-primary-700">
-                          {product.rating} ({product.reviewCount})
+                          {/* {product.rating} ({product.reviewCount}) */}
                         </span>
                       </div>
                     )}
-                    <h3 className="mt-1.5 font-display text-base font-semibold text-primary-950">
+                    <h3 className="mt-1.5 font-display text-[22px] font-semibold text-primary-950">
                       {product.name}
                     </h3>
-                    <div className="mt-2 flex items-center gap-2">
-                      <span className="text-sm font-semibold text-primary-900">
-                        {formatPrice(product.price, product.currency)}
-                      </span>
-                      {product.compareAtPrice && (
-                        <span className="text-xs text-primary-400 line-through">
-                          {formatPrice(product.compareAtPrice, product.currency)}
-                        </span>
-                      )}
-                    </div>
+                    {product.description && (
+                      <p className="mt-1 line-clamp-2 text-[18px] text-primary-600">
+                        {product.description}
+                      </p>
+                    )}
                   </div>
+                  </Link>
                 </motion.div>
               ))}
           </AnimatePresence>

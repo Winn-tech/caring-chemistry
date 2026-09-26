@@ -1,4 +1,5 @@
-import { Role } from "@/generated/prisma/client";
+import { AnnouncementDirection, Role } from "@/generated/prisma/client";
+import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { errorResponse, ok } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
@@ -33,16 +34,20 @@ export async function POST(request: Request) {
   try {
     const user = await requireRole(request, [Role.GENERAL_ADMIN, Role.SOCIAL_TEAM]);
     const input = schema.parse(await request.json());
-    const announcementBar = await prisma.announcementBar.create({
-      data: {
-        content: input.content,
-        isActive: input.isActive,
-        speed: input.speed,
-        background: input.background,
-        textColor: input.textColor,
-        direction: input.direction,
-        link: input.link,
-      },
+    const announcementBar = await prisma.$transaction(async (tx) => {
+      if (input.isActive) await tx.announcementBar.updateMany({ where: { isActive: true }, data: { isActive: false } });
+      return tx.announcementBar.create({
+        data: {
+          id: randomUUID(),
+          content: input.content,
+          isActive: input.isActive,
+          speed: input.speed,
+          background: input.background,
+          textColor: input.textColor,
+          direction: input.direction === "right" ? AnnouncementDirection.RIGHT : input.direction === "left" ? AnnouncementDirection.LEFT : undefined,
+          link: input.link,
+        },
+      });
     });
 
     await audit(user.id, "ANNOUNCEMENT_BAR_CREATED", "AnnouncementBar", announcementBar.id, request);

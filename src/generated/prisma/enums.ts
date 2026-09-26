@@ -28,15 +28,6 @@ export const ProductStatus = {
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
 
 
-export const CartStatus = {
-  ACTIVE: 'ACTIVE',
-  ABANDONED: 'ABANDONED',
-  CONVERTED: 'CONVERTED'
-} as const
-
-export type CartStatus = (typeof CartStatus)[keyof typeof CartStatus]
-
-
 export const OrderStatus = {
   PENDING_PAYMENT: 'PENDING_PAYMENT',
   PAID: 'PAID',
@@ -60,6 +51,14 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const InvoiceStatus = {
+  ISSUED: 'ISSUED',
+  VOID: 'VOID'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
+
 export const PostStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
@@ -69,12 +68,29 @@ export const PostStatus = {
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
 
 
+export const NewsletterCampaignStatus = {
+  DRAFT: 'DRAFT',
+  SENDING: 'SENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type NewsletterCampaignStatus = (typeof NewsletterCampaignStatus)[keyof typeof NewsletterCampaignStatus]
+
+
 export const ProductBadge = {
   NEW: 'NEW',
   BESTSELLER: 'BESTSELLER'
 } as const
 
 export type ProductBadge = (typeof ProductBadge)[keyof typeof ProductBadge]
+
+
+export const RetailerType = {
+  ONLINE: 'ONLINE'
+} as const
+
+export type RetailerType = (typeof RetailerType)[keyof typeof RetailerType]
 
 
 export const AnnouncementDirection = {

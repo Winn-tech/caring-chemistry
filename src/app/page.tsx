@@ -6,6 +6,8 @@ import "./globals.css";
 import { BestSellers } from "./components/best-sellers";
 import { BrandValues } from "./components/brand-values";
 import { BeautyJournal } from "./components/beauty-journal";
+import { Footer } from "./components/footer";
+import { NewsletterModal } from "./components/newsletter-modal";
 
 export default function Home() {
   return (
@@ -16,6 +18,8 @@ export default function Home() {
       <BestSellers/>
       <BeautyJournal />
       <BrandValues/>
+      <NewsletterModal />
+      <Footer/>
     </main>
   );
 }

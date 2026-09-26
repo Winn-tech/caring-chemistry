@@ -1,0 +1,1 @@
+ALTER TYPE "NewsletterCampaignStatus" ADD VALUE 'SENDING' AFTER 'DRAFT';

@@ -16,10 +16,11 @@ const schema = z.object({
 
 export async function GET(request: Request) {
   try {
-    await requireRole(request, [Role.GENERAL_ADMIN, Role.SALES_TEAM, Role.SOCIAL_TEAM]);
+    const user = await requireRole(request, [Role.GENERAL_ADMIN, Role.SOCIAL_TEAM]);
 
     return ok(
       await prisma.blogPost.findMany({
+        where: user.role === Role.SOCIAL_TEAM ? { authorId: user.id } : undefined,
         include: {
           author: { select: { id: true, name: true, email: true } },
         },

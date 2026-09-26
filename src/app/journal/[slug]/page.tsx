@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AnnouncementBar } from "../../components/announcement-bar";
 import { Navbar } from "../../components/navbar";
 import { Reveal } from "../../components/reveal";
+import { NewsletterModal } from "../../components/newsletter-modal";
 import { JOURNAL_ARTICLES } from "../journal-data";
 
 export function generateStaticParams() {
@@ -43,6 +44,7 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
           </div>
         </div>
       </article>
+      <NewsletterModal trigger="reading" />
     </main>
   );
 }

@@ -38,20 +38,40 @@ export type Product = Prisma.ProductModel
  */
 export type ProductImage = Prisma.ProductImageModel
 /**
- * Model Cart
+ * Model Retailer
  * 
  */
-export type Cart = Prisma.CartModel
+export type Retailer = Prisma.RetailerModel
 /**
- * Model CartItem
+ * Model ProductRetailer
  * 
  */
-export type CartItem = Prisma.CartItemModel
+export type ProductRetailer = Prisma.ProductRetailerModel
+/**
+ * Model Store
+ * 
+ */
+export type Store = Prisma.StoreModel
 /**
  * Model Order
  * 
  */
 export type Order = Prisma.OrderModel
+/**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
+ * Model CreditNote
+ * 
+ */
+export type CreditNote = Prisma.CreditNoteModel
+/**
+ * Model InvoiceSequence
+ * 
+ */
+export type InvoiceSequence = Prisma.InvoiceSequenceModel
 /**
  * Model OrderItem
  * 
@@ -62,6 +82,16 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type BlogPost = Prisma.BlogPostModel
+/**
+ * Model NewsletterSubscriber
+ * 
+ */
+export type NewsletterSubscriber = Prisma.NewsletterSubscriberModel
+/**
+ * Model NewsletterCampaign
+ * 
+ */
+export type NewsletterCampaign = Prisma.NewsletterCampaignModel
 /**
  * Model AuditLog
  * 
@@ -77,3 +107,9 @@ export type AnnouncementBar = Prisma.AnnouncementBarModel
  * 
  */
 export type RateLimitEvent = Prisma.RateLimitEventModel
+/**
+ * Model RetailerClick
+ * One click on a "Buy on <retailer>" button. Keyed by product and retailer
+ * (not the link row) because product saves recreate their retailer links.
+ */
+export type RetailerClick = Prisma.RetailerClickModel

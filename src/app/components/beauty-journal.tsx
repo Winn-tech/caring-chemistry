@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, Leaf } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Reveal } from "./reveal";
@@ -92,7 +92,7 @@ export function BeautyJournal() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Sparkles size={16} strokeWidth={1.5} />
+                <Leaf size={16} strokeWidth={1.5} />
               </motion.span>
               <span className="text-xs font-semibold uppercase tracking-[0.22em]">The Beauty Journal</span>
             </div>

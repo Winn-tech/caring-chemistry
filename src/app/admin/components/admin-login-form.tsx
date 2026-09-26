@@ -1,0 +1,47 @@
+"use client";
+
+import { useState } from "react";
+
+export function AdminLoginForm() {
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setPending(true);
+
+    const form = new FormData(event.currentTarget);
+    try {
+      const response = await fetch("/api/v1/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
+      });
+      const body = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(body?.error ?? "Unable to sign in.");
+      window.location.assign("/admin/dashboard");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to sign in.");
+      setPending(false);
+    }
+  }
+
+  return (
+    <form className="mt-8 space-y-5" onSubmit={submit}>
+      <div>
+        <label className="text-sm font-medium text-primary-800" htmlFor="email">Email address</label>
+        <input className="mt-2 w-full rounded-lg border border-primary-200 px-3.5 py-3 text-sm outline-none transition focus:border-accent-600 focus:ring-2 focus:ring-accent-100" id="email" name="email" type="email" autoComplete="email" required />
+      </div>
+      <div>
+        <label className="text-sm font-medium text-primary-800" htmlFor="password">Password</label>
+        <input className="mt-2 w-full rounded-lg border border-primary-200 px-3.5 py-3 text-sm outline-none transition focus:border-accent-600 focus:ring-2 focus:ring-accent-100" id="password" name="password" type="password" autoComplete="current-password" required />
+      </div>
+      {error && <p className="rounded-lg bg-red-50 px-3 py-2.5 text-sm text-red-700" role="alert">{error}</p>}
+      <button className="w-full rounded-lg bg-primary-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60" disabled={pending} type="submit">
+        {pending ? "Signing in…" : "Sign in securely"}
+      </button>
+    </form>
+  );
+}

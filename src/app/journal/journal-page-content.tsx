@@ -10,8 +10,9 @@ import { JournalHero } from "./components/journal-hero";
 import { JournalLatest } from "./components/journal-latest";
 import { JournalNewsletter } from "./components/journal-newsletter";
 import { RoutineBuilder } from "./components/routine-builder";
+import type { JournalArticle } from "./journal-data";
 
-export function JournalPageContent() {
+export function JournalPageContent({ adminArticles }: { adminArticles: JournalArticle[] }) {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("search") ?? "");
   const [category, setCategory] = useState(searchParams.get("category") ?? "All");
@@ -21,7 +22,7 @@ export function JournalPageContent() {
       <JournalHero query={query} onQueryChange={setQuery} />
       <JournalCategories category={category} onCategoryChange={setCategory} />
       <JournalFeatured />
-      <JournalLatest query={query} category={category} concern={searchParams.get("concern") ?? ""} />
+      <JournalLatest query={query} category={category} concern={searchParams.get("concern") ?? ""} adminArticles={adminArticles} />
       <JournalConcerns />
       <IngredientSpotlight />
       <RoutineBuilder />

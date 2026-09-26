@@ -8,6 +8,7 @@ interface JournalLatestProps {
   query: string;
   category: string;
   concern: string;
+  adminArticles: JournalArticle[];
 }
 
 function ArticleCard({ article, index }: { article: JournalArticle; index: number }) {
@@ -28,9 +29,9 @@ function ArticleCard({ article, index }: { article: JournalArticle; index: numbe
   );
 }
 
-export function JournalLatest({ query, category, concern }: JournalLatestProps) {
+export function JournalLatest({ query, category, concern, adminArticles }: JournalLatestProps) {
   const normalizedQuery = query.trim().toLowerCase();
-  const articles = JOURNAL_ARTICLES.filter((article) => {
+  const articles = [...adminArticles, ...JOURNAL_ARTICLES].filter((article) => {
     const matchesCategory = category === "All" || article.category === category;
     const matchesConcern = !concern || article.concern === concern;
     const matchesQuery = !normalizedQuery || `${article.title} ${article.excerpt} ${article.category}`.toLowerCase().includes(normalizedQuery);
@@ -38,7 +39,7 @@ export function JournalLatest({ query, category, concern }: JournalLatestProps) 
   });
 
   return (
-    <section className="bg-[#f8f6f2] px-6 pb-20 lg:px-10 lg:pb-28">
+    <section id="latest-stories" className="bg-[#f8f6f2] px-6 pb-20 lg:px-10 lg:pb-28">
       <div className="mx-auto max-w-7xl">
         <Reveal className="flex items-end justify-between gap-4 border-t border-primary-200 pt-10">
           <div><p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent-700">The collection</p><h2 className="mt-3 font-display text-4xl font-semibold text-primary-950">Latest stories</h2></div>

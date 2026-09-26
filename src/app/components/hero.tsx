@@ -1,79 +1,123 @@
-// components/Hero.tsx
+// app/components/hero.tsx
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { HeroReel } from "./hero-reel";
+import { IngredientRibbon } from "./ingredient-ribbon";
 
-const SHADE_STRIP = [
-  "bg-accent-300",
-  "bg-accent-500",
-  "bg-primary-400",
-  "bg-primary-600",
-  "bg-accent-700",
+const TRUST_POINTS = [
+  { value: "15,200+", label: "five-star reviews" },
+  { value: "98%", label: "would repurchase" },
+  { value: "20+", label: "years in the lab" },
+];
+
+const INGREDIENTS = [
+  "Niacinamide",
+  "Peptide Complex",
+  "Hyaluronic Acid",
+  "Ceramides",
+  "Vitamin C",
+  "Squalane",
+  "Centella",
+  "Bakuchiol",
 ];
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-primary-950">
-      {/* ambient glow */}
-      <div className="pointer-events-none absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-accent-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 left-10 h-[22rem] w-[22rem] rounded-full bg-primary-500/25 blur-3xl" />
+    <section className="hero-luxe relative isolate overflow-hidden text-white">
+      {/* backdrop */}
+      <div aria-hidden="true" className="hero-grain pointer-events-none absolute inset-0 -z-10" />
+      <div aria-hidden="true" className="hero-orb pointer-events-none absolute -right-40 -top-40 -z-10 h-[36rem] w-[36rem] rounded-full" />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 py-24 lg:grid-cols-2 lg:px-10 lg:py-32">
-        <div>
-          {/* eyebrow + signature shade strip */}
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex -space-x-1">
-              {SHADE_STRIP.map((color, i) => (
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 pb-16 pt-14 lg:grid-cols-12 lg:gap-10 lg:px-10 lg:pb-24 lg:pt-20">
+        {/* copy */}
+        <div className="lg:col-span-7">
+          <div
+            className="hero-rise inline-flex items-center gap-3 rounded-full border border-accent-300/25 bg-white/[0.04] py-1.5 pl-2 pr-4 backdrop-blur-sm"
+            style={{ "--hero-delay": "0ms" } as React.CSSProperties}
+          >
+            <span aria-hidden="true" className="flex -space-x-1">
+              {["#f4dcc9", "#d49a6a", "#9a5f38", "#45271a"].map((tone) => (
                 <span
-                  key={i}
-                  className={`h-3 w-3 rounded-full ring-2 ring-primary-950 ${color}`}
+                  key={tone}
+                  className="h-4 w-4 rounded-full ring-2 ring-[var(--hero-ink)]"
+                  style={{ backgroundColor: tone }}
                 />
               ))}
-            </div>
-            <span className="font-accent text-lg italic text-primary-200">
-              New — Skin Rituals
+            </span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-accent-200">
+              Products for every skin tone
             </span>
           </div>
 
-          <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Skincare tuned to
+          <h1
+            className="hero-rise mt-8 font-display text-[3.25rem] font-semibold leading-[0.95] tracking-[-0.035em] sm:text-7xl xl:text-[5.75rem]"
+            style={{ "--hero-delay": "120ms" } as React.CSSProperties}
+          >
+            Beauty in
             <br />
-            your undertone.
+            <span className="hero-gold-text pr-2 font-accent text-[1.12em] font-normal tracking-[-0.01em]">
+              every
+            </span>
+            shade.
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-relaxed text-primary-200">
-            Formulated in small batches, matched to your skin&apos;s actual
-            chemistry — not a shade card. Ships within Lagos in 48 hours.
+          <p
+            className="hero-rise mt-7 max-w-lg text-base leading-relaxed text-primary-100/75 sm:text-lg"
+            style={{ "--hero-delay": "240ms" } as React.CSSProperties}
+          >
+            Skincare formulated and tested across the full spectrum of skin
+            tones. Safe, effective and made for you.
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-4">
+          <div
+            className="hero-rise mt-10 flex flex-wrap items-center gap-x-8 gap-y-5"
+            style={{ "--hero-delay": "360ms" } as React.CSSProperties}
+          >
             <Link
               href="/shop"
-              className="rounded-full bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-600"
+              className="hero-cta group inline-flex items-center gap-3 rounded-full py-2 pl-7 pr-2 text-sm font-semibold text-[#2a0619] outline-none focus-visible:ring-2 focus-visible:ring-accent-200 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--hero-ink)]"
             >
-              Shop the Edit
+              Shop the Collection
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2a0619] text-accent-200 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-45">
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </span>
             </Link>
             <Link
-              href="/rituals"
-              className="rounded-full border border-primary-400 px-7 py-3.5 text-sm font-semibold text-primary-100 transition-colors hover:border-accent-400 hover:text-accent-300"
+              href="/journal"
+              className="group relative rounded text-sm font-medium text-primary-50 outline-none focus-visible:ring-2 focus-visible:ring-accent-200 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--hero-ink)]"
             >
-              Take the Skin Quiz
+              Read the Journal
+              <span className="absolute -bottom-1 left-0 h-px w-full origin-left bg-accent-300/60 transition-transform duration-500 group-hover:scale-x-0" />
+              <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-accent-300 transition-transform delay-150 duration-500 group-hover:origin-left group-hover:scale-x-100" />
             </Link>
           </div>
+
+          <dl
+            className="hero-rise mt-14 grid max-w-lg grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6"
+            style={{ "--hero-delay": "480ms" } as React.CSSProperties}
+          >
+            {TRUST_POINTS.map(({ value, label }) => (
+              <div key={label} className="px-4 first:pl-0">
+                <dt className="sr-only">{label}</dt>
+                <dd>
+                  <span className="block font-display text-xl font-semibold text-accent-200 sm:text-2xl">
+                    {value}
+                  </span>
+                  <span className="mt-1 block text-xs text-primary-100/60">{label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* product frame */}
-        <div className="relative mx-auto aspect-[4/5] w-full max-w-sm">
-          <div className="absolute inset-0 rounded-[2rem] border border-primary-700 bg-primary-900/60 shadow-2xl" />
-          <div className="absolute inset-6 rounded-[1.5rem] bg-gradient-to-br from-primary-700 via-primary-800 to-primary-950" />
-          <div className="absolute bottom-8 left-8 right-8 rounded-xl bg-white/10 p-4 backdrop-blur-sm">
-            <p className="font-accent text-lg italic text-accent-300">
-              Le Serum No. 3
-            </p>
-            <p className="mt-1 text-xs text-primary-200">
-              Niacinamide · Peptide complex
-            </p>
-          </div>
+        {/* visual */}
+        <div className="lg:col-span-5">
+          <HeroReel />
         </div>
       </div>
+
+      {/* ingredient ribbon */}
+      <IngredientRibbon items={INGREDIENTS} />
     </section>
   );
 }

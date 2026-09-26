@@ -31,7 +31,7 @@ const schema = z.object({
 
 export async function GET(request: Request) {
   try {
-    await requireRole(request, [Role.GENERAL_ADMIN, Role.SALES_TEAM, Role.SOCIAL_TEAM]);
+    await requireRole(request, [Role.GENERAL_ADMIN, Role.SALES_TEAM]);
 
     const q = new URL(request.url).searchParams;
     const status = q.get("status") as ProductStatus | null;

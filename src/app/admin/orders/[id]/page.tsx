@@ -1,0 +1,20 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { PaymentStatus, Role } from "@/generated/prisma/client";
+import { requireAdminPage } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { AdminShell } from "../../components/admin-shell";
+import { allowedNextStatuses } from "../actions";
+import { OrderStatusForm } from "../components/order-status-form";
+import { IssueInvoiceForm } from "../../invoices/components/issue-invoice-form";
+
+export const dynamic = "force-dynamic";
+const money = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 });
+
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const user = await requireAdminPage([Role.GENERAL_ADMIN, Role.SALES_TEAM]);
+  const { id } = await params;
+  const order = await prisma.order.findFirst({ where: { id, ...(user.role === Role.SALES_TEAM ? { paymentStatus: { in: [PaymentStatus.PAID, PaymentStatus.REFUNDED] } } : {}) }, include: { items: true, invoice: { include: { creditNotes: true } } } });
+  if (!order) notFound();
+  return <AdminShell user={user}><Link className="text-sm font-medium text-primary-600 hover:text-primary-950" href="/admin/orders">← Back to orders</Link><header className="mt-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-700">Order</p><h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">{order.reference}</h1><p className="mt-2 text-sm text-primary-600">Placed {order.createdAt.toLocaleDateString("en-NG", { dateStyle: "long" })} · {order.email}</p></header><div className="mt-8 grid gap-6 lg:grid-cols-[1.35fr_0.65fr]"><section className="overflow-hidden rounded-xl border border-primary-100 bg-white"><h2 className="border-b border-primary-100 px-5 py-4 font-display text-xl font-semibold">Items</h2><div className="divide-y divide-primary-100">{order.items.map((item) => <div className="flex items-center justify-between gap-5 px-5 py-4" key={item.id}><div><p className="font-medium">{item.productName}</p><p className="mt-1 text-xs text-primary-500">Quantity {item.quantity}</p></div><p className="font-medium">{money.format(Number(item.unitPrice) * item.quantity)}</p></div>)}</div></section><aside className="space-y-6"><section className="rounded-xl border border-primary-100 bg-white p-5"><h2 className="font-display text-xl font-semibold">Payment</h2><dl className="mt-4 space-y-3 text-sm"><div className="flex justify-between gap-4"><dt className="text-primary-600">Status</dt><dd className="font-medium">{order.paymentStatus}</dd></div><div className="flex justify-between gap-4"><dt className="text-primary-600">Subtotal</dt><dd>{money.format(Number(order.subtotal))}</dd></div><div className="flex justify-between gap-4"><dt className="text-primary-600">Delivery</dt><dd>{money.format(Number(order.deliveryFee))}</dd></div><div className="flex justify-between gap-4 border-t border-primary-100 pt-3 font-semibold"><dt>Total</dt><dd>{money.format(Number(order.total))}</dd></div></dl></section><section className="rounded-xl border border-primary-100 bg-white p-5"><h2 className="font-display text-xl font-semibold">Invoice</h2>{order.invoice ? <div className="mt-3 text-sm"><Link className="font-semibold text-primary-950 underline" href={`/admin/invoices/${order.invoice.id}`}>{order.invoice.number}</Link>{order.invoice.creditNotes.length > 0 && <p className="mt-2 text-primary-600">Credit note {order.invoice.creditNotes[0].number} issued.</p>}</div> : order.paymentStatus === PaymentStatus.PAID ? <IssueInvoiceForm orderId={order.id} /> : <p className="mt-2 text-sm text-primary-600">An invoice is available once payment is confirmed.</p>}</section><section className="rounded-xl border border-primary-100 bg-white p-5"><h2 className="font-display text-xl font-semibold">Fulfilment</h2><p className="mt-2 text-sm text-primary-600">Current status: <span className="font-medium text-primary-950">{order.status.replaceAll("_", " ")}</span></p><OrderStatusForm id={order.id} options={allowedNextStatuses(order.status)} /></section></aside></div></AdminShell>;
+}

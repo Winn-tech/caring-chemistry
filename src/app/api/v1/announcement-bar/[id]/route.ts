@@ -1,4 +1,4 @@
-import { Role } from "@/generated/prisma/client";
+import { AnnouncementDirection, Role } from "@/generated/prisma/client";
 import { z } from "zod";
 import { errorResponse, ok } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
@@ -19,9 +19,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   try {
     const user = await requireRole(request, [Role.GENERAL_ADMIN, Role.SOCIAL_TEAM]);
     const { id } = await params;
-    const announcementBar = await prisma.announcementBar.update({
-      where: { id },
-      data: schema.parse(await request.json()),
+    const input = schema.parse(await request.json());
+    const announcementBar = await prisma.$transaction(async (tx) => {
+      if (input.isActive) await tx.announcementBar.updateMany({ where: { isActive: true, id: { not: id } }, data: { isActive: false } });
+      return tx.announcementBar.update({
+        where: { id },
+        data: { ...input, direction: input.direction === "right" ? AnnouncementDirection.RIGHT : input.direction === "left" ? AnnouncementDirection.LEFT : undefined },
+      });
     });
 
     await audit(user.id, "ANNOUNCEMENT_BAR_UPDATED", "AnnouncementBar", id, request);

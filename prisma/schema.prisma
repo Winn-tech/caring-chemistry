@@ -13,16 +13,13 @@ enum Role {
   SOCIAL_TEAM
   CUSTOMER
 }
+
 enum ProductStatus {
   DRAFT
   ACTIVE
   ARCHIVED
 }
-enum CartStatus {
-  ACTIVE
-  ABANDONED
-  CONVERTED
-}
+
 enum OrderStatus {
   PENDING_PAYMENT
   PAID
@@ -32,35 +29,57 @@ enum OrderStatus {
   CANCELLED
   REFUNDED
 }
+
 enum PaymentStatus {
   PENDING
   PAID
   FAILED
   REFUNDED
 }
+
+enum InvoiceStatus {
+  ISSUED
+  VOID
+}
+
 enum PostStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
 }
+
+enum NewsletterCampaignStatus {
+  DRAFT
+  SENDING
+  SENT
+  FAILED
+}
+
 enum ProductBadge {
   NEW
   BESTSELLER
 }
 
+enum RetailerType {
+  ONLINE
+}
+
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String
-  passwordHash String
-  role         Role     @default(CUSTOMER)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  orders       Order[]
-  carts        Cart[]
-  auditLogs    AuditLog[] @relation("AuditActor")
-  posts        BlogPost[] @relation("PostAuthor")
+  id                   String               @id @default(cuid())
+  email                String               @unique
+  name                 String
+  passwordHash         String
+  role                 Role                 @default(CUSTOMER)
+  isActive             Boolean              @default(true)
+  invitationTokenHash  String?              @unique
+  invitationExpiresAt  DateTime?
+  invitationAcceptedAt DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  orders               Order[]
+  auditLogs            AuditLog[]           @relation("AuditActor")
+  posts                BlogPost[]           @relation("PostAuthor")
+  newsletterCampaigns  NewsletterCampaign[] @relation("NewsletterCampaignAuthor")
 }
 
 model Category {
@@ -73,27 +92,29 @@ model Category {
 }
 
 model Product {
-  id             String        @id @default(cuid())
+  id             String            @id @default(cuid())
   name           String
-  slug           String        @unique
+  slug           String            @unique
   description    String?
-  price          Decimal       @db.Decimal(12, 2)
-  compareAtPrice Decimal?      @db.Decimal(12, 2)
-  currency       String        @default("NGN")
-  stock          Int           @default(0)
-  status         ProductStatus @default(DRAFT)
+  price          Decimal           @db.Decimal(12, 2)
+  compareAtPrice Decimal?          @db.Decimal(12, 2)
+  currency       String            @default("NGN")
+  stock          Int               @default(0)
+  status         ProductStatus     @default(DRAFT)
   badge          ProductBadge?
-  rating         Decimal?      @db.Decimal(2, 1)
-  reviewCount    Int           @default(0)
-  isBestSeller   Boolean       @default(false)
+  rating         Decimal?          @db.Decimal(2, 1)
+  reviewCount    Int               @default(0)
+  isBestSeller   Boolean           @default(false)
   categoryId     String
-  category       Category      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  category       Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   images         ProductImage[]
-  cartItems      CartItem[]
+  retailers      ProductRetailer[]
+  retailerClicks RetailerClick[]
   orderItems     OrderItem[]
   deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
   @@index([categoryId, status])
   @@index([deletedAt])
   @@index([isBestSeller, status])
@@ -110,55 +131,135 @@ model ProductImage {
   createdAt DateTime @default(now())
 }
 
-model Cart {
-  id        String     @id @default(cuid())
-  userId    String?
-  email     String?
-  status    CartStatus @default(ACTIVE)
-  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
-  items     CartItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  @@index([status, updatedAt])
+model Retailer {
+  id         String            @id @default(cuid())
+  name       String
+  type       RetailerType      @default(ONLINE)
+  country    String?
+  websiteUrl String?
+  priority   Int               @default(0)
+  isActive   Boolean           @default(true)
+  products   ProductRetailer[]
+  clicks     RetailerClick[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([isActive, priority, name])
 }
 
-model CartItem {
-  id        String   @id @default(cuid())
-  cartId    String
-  productId String
-  quantity  Int      @default(1)
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  @@unique([cartId, productId])
+model ProductRetailer {
+  id                 String    @id @default(cuid())
+  productId          String
+  retailerId         String
+  externalProductUrl String
+  isAvailable        Boolean   @default(true)
+  externalPrice      Decimal?  @db.Decimal(12, 2)
+  lastCheckedAt      DateTime?
+  product            Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  retailer           Retailer  @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([productId, retailerId])
+  @@index([productId, isAvailable])
+  @@index([retailerId, isAvailable])
+}
+
+model Store {
+  id           String   @id @default(cuid())
+  name         String
+  address      String
+  city         String?
+  state        String?
+  country      String
+  phone        String?
+  email        String?
+  latitude     Decimal? @db.Decimal(9, 6)
+  longitude    Decimal? @db.Decimal(9, 6)
+  openingHours Json?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive, country, state, city, name])
 }
 
 model Order {
-  id            String        @id @default(cuid())
-  reference     String        @unique
-  userId        String?
-  email         String
-  status        OrderStatus   @default(PENDING_PAYMENT)
-  paymentStatus PaymentStatus @default(PENDING)
-  subtotal      Decimal       @db.Decimal(12, 2)
-  deliveryFee   Decimal       @default(0) @db.Decimal(12, 2)
-  total         Decimal       @db.Decimal(12, 2)
-  paystackRef   String?       @unique
-  user          User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  items         OrderItem[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id             String        @id @default(cuid())
+  reference      String        @unique
+  userId         String?
+  email          String
+  status         OrderStatus   @default(PENDING_PAYMENT)
+  paymentStatus  PaymentStatus @default(PENDING)
+  subtotal       Decimal       @db.Decimal(12, 2)
+  deliveryFee    Decimal       @default(0) @db.Decimal(12, 2)
+  taxAmount      Decimal       @default(0) @db.Decimal(12, 2)
+  discountAmount Decimal       @default(0) @db.Decimal(12, 2)
+  total          Decimal       @db.Decimal(12, 2)
+  billingName    String?
+  billingAddress Json?
+  user           User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items          OrderItem[]
+  invoice        Invoice?
+  creditNotes    CreditNote[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
   @@index([status, paymentStatus, createdAt])
 }
 
+model Invoice {
+  id             String        @id @default(cuid())
+  orderId        String        @unique
+  number         String        @unique
+  status         InvoiceStatus @default(ISSUED)
+  customerEmail  String
+  currency       String
+  subtotal       Decimal       @db.Decimal(12, 2)
+  deliveryFee    Decimal       @db.Decimal(12, 2)
+  taxAmount      Decimal       @db.Decimal(12, 2)
+  discountAmount Decimal       @db.Decimal(12, 2)
+  total          Decimal       @db.Decimal(12, 2)
+  snapshot       Json
+  issuedAt       DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+  order          Order         @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  creditNotes    CreditNote[]
+
+  @@index([issuedAt])
+}
+
+model CreditNote {
+  id        String   @id @default(cuid())
+  invoiceId String
+  orderId   String   @unique
+  number    String   @unique
+  amount    Decimal  @db.Decimal(12, 2)
+  currency  String
+  reason    String?
+  issuedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([invoiceId, issuedAt])
+}
+
+model InvoiceSequence {
+  id         String   @id
+  nextNumber Int      @default(1)
+  updatedAt  DateTime @updatedAt
+}
+
 model OrderItem {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   orderId     String
   productId   String
   productName String
-  unitPrice   Decimal  @db.Decimal(12, 2)
+  unitPrice   Decimal @db.Decimal(12, 2)
   quantity    Int
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product     Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 }
 
 model BlogPost {
@@ -166,6 +267,7 @@ model BlogPost {
   title       String
   slug        String     @unique
   excerpt     String?
+  category    String     @default("Skincare")
   content     String
   coverUrl    String?
   status      PostStatus @default(DRAFT)
@@ -174,7 +276,35 @@ model BlogPost {
   author      User       @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Restrict)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
   @@index([status, publishedAt])
+}
+
+model NewsletterSubscriber {
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  isActive             Boolean   @default(true)
+  confirmedAt          DateTime?
+  unsubscribeTokenHash String    @unique
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([isActive, createdAt])
+}
+
+model NewsletterCampaign {
+  id             String                   @id @default(cuid())
+  subject        String
+  content        String
+  status         NewsletterCampaignStatus @default(DRAFT)
+  recipientCount Int                      @default(0)
+  sentAt         DateTime?
+  createdById    String
+  createdBy      User                     @relation("NewsletterCampaignAuthor", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+
+  @@index([status, createdAt])
 }
 
 model AuditLog {
@@ -187,10 +317,10 @@ model AuditLog {
   ipAddress String?
   createdAt DateTime @default(now())
   actor     User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+
   @@index([entity, entityId, createdAt])
   @@index([actorId, createdAt])
 }
-
 
 enum AnnouncementDirection {
   LEFT
@@ -198,21 +328,37 @@ enum AnnouncementDirection {
 }
 
 model AnnouncementBar {
-  id         String               @id
-  isActive   Boolean              @default(false)
+  id         String                @id
+  isActive   Boolean               @default(false)
   content    String
-  speed      Int                  @default(40)
-  background String               @default("#000000")
-  textColor  String               @default("#FFFFFF")
+  speed      Int                   @default(40)
+  background String                @default("#000000")
+  textColor  String                @default("#FFFFFF")
   direction  AnnouncementDirection @default(LEFT)
   link       String?
-  createdAt  DateTime             @default(now())
-  updatedAt  DateTime             @updatedAt
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
 }
 
 model RateLimitEvent {
   id        String   @id @default(cuid())
   key       String
   createdAt DateTime @default(now())
+
   @@index([key, createdAt])
+}
+
+/// One click on a "Buy on <retailer>" button. Keyed by product and retailer
+/// (not the link row) because product saves recreate their retailer links.
+model RetailerClick {
+  id         String   @id @default(cuid())
+  productId  String
+  retailerId String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  retailer   Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([retailerId, createdAt])
+  @@index([productId, createdAt])
 }

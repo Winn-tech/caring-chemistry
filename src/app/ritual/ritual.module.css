@@ -1,0 +1,20 @@
+.page section[id] { scroll-margin-top: 6rem; }
+.page :is(a, button, summary, input):focus-visible { outline: 2px solid #a80763; outline-offset: 5px; }
+.eyebrow { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #a80763; }
+.heading { margin-top: 1rem; font-family: var(--font-display); font-size: clamp(2.25rem, 4vw, 3.75rem); font-weight: 500; line-height: 1.06; letter-spacing: -0.045em; }
+.button, .secondary { display: inline-flex; min-height: 3rem; justify-content: center; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600; transition: background 200ms, transform 200ms; }
+.button { background: #a80763; color: white; }
+.button:hover { background: #870550; transform: translateY(-2px); }
+.secondary { border: 1px solid #d9c6ce; color: #30232d; }
+.secondary:hover { background: #fffaf8; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg { transition: transform 200ms; }
+.faq[open] summary svg { transform: rotate(45deg); }
+.faq[open] p { animation: unfold 250ms ease-out; }
+.floatingNote { animation: arrive 900ms ease-out both; }
+@keyframes arrive { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes unfold { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .page *, .page *::before, .page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .button:hover { transform: none; }
+}

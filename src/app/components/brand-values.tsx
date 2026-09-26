@@ -3,34 +3,37 @@
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { FlaskConical, Leaf, PawPrint, ShieldCheck } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Reveal } from "./reveal";
 import { useCountUp } from "@/app/hooks/use-count-up";
 
 const VALUES = [
   {
-    icon: FlaskConical,
+    icon: "fluent-emoji:alembic",
+    tone: "rose",
     title: "Dermatologist Formulated",
     description:
       "Every product is developed with board-certified dermatologists and clinically tested before launch.",
   },
   {
-    icon: Leaf,
-    title: "Clean, Traceable Ingredients",
+    icon: "fluent-emoji:herb",
+    tone: "gold",
+    title: "Quality You Can Trust",
     description:
-      "No parabens, sulfates, or synthetic fragrance — every ingredient is sourced and disclosed.",
+      "From ingredient selection to the final product, we pay attention to the details that matter. Our focus is on creating consistently high-quality skincare you can confidently make part of your daily routine.",
   },
   {
-    icon: PawPrint,
-    title: "Cruelty-Free, Always",
+    icon: "fluent-emoji:eye",
+    tone: "rose",
+    title: "Transparent by Design",
     description:
-      "Never tested on animals, at any stage, in any market we sell in.",
+      "We believe you deserve to know what you're using. From our ingredients to how our products are made, we aim to communicate clearly so you can make informed choices about your skincare.",
   },
   {
-    icon: ShieldCheck,
-    title: "30-Day Skin Guarantee",
-    description:
-      "Not a match for your skin? Full refund within 30 days, no questions asked.",
+    icon: "fluent-emoji:shield",
+    tone: "gold",
+    title: "Gentle on Your Skin",
+    description: "We believe skincare should work with your skin, not against it. Our formulas are thoughtfully designed to deliver meaningful results while supporting your skin's natural balance and comfort.",
   },
 ];
 
@@ -38,7 +41,7 @@ const STATS = [
   { label: "5-star reviews", value: 15200, suffix: "+" },
   { label: "would repurchase", value: 98, suffix: "%" },
   { label: "ingredients tested", value: 340, suffix: "+" },
-  { label: "years in the lab", value: 20, suffix: "+=" },
+  { label: "years in the lab", value: 20, suffix: "+" },
 ];
 
 function StatCounter({
@@ -82,15 +85,17 @@ export function BrandValues() {
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {VALUES.map(({ icon: Icon, title, description }, i) => (
+          {VALUES.map(({ icon, tone, title, description }, i) => (
             <Reveal key={title} delay={i * 100} className="group">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary-700 transition-colors duration-300 group-hover:bg-accent-500 group-hover:text-white">
-                <Icon size={22} />
+              <div className={`brand-value-icon brand-value-icon-${tone}`} aria-hidden="true">
+                <div className="brand-value-icon-face">
+                  <Icon className="brand-value-icon-art" icon={icon} width={64} height={64} />
+                </div>
               </div>
-              <h3 className="mt-5 font-display text-lg font-semibold text-primary-950">
+              <h3 className="mt-5 font-display text-[22px] font-semibold text-primary-950">
                 {title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-primary-500">
+              <p className="mt-2 text-[17px] leading-relaxed text-primary-500">
                 {description}
               </p>
             </Reveal>
