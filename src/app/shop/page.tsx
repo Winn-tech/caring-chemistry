@@ -48,7 +48,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           <ShopHeader
             title={activeCategory === "all" ? "Shop All Beauty" : categoryLabel}
             count={result.total}
-            imageUrl="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1400&q=80"
+            imageUrl="/images/Estee_Maxitone.png"
           />
 
           <CategoryNav activeSlug={activeCategory} />

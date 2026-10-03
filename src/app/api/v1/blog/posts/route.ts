@@ -4,11 +4,13 @@ import { errorResponse, ok } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { audit } from "@/lib/security";
+import { BLOG_CATEGORIES } from "@/lib/blog";
 
 const schema = z.object({
   title: z.string().min(2).max(180),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   excerpt: z.string().max(500).optional(),
+  category: z.enum(BLOG_CATEGORIES).default("Skincare"),
   content: z.string().min(20).max(100000),
   coverUrl: z.string().url().optional(),
   status: z.nativeEnum(PostStatus).default(PostStatus.DRAFT),

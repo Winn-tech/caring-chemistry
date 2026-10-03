@@ -98,10 +98,14 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
+  // Close menus when the route changes. Done during render (React's "adjust state on prop change"
+  // pattern) rather than in an effect, which would first paint the stale open menu.
+  const [menuPathname, setMenuPathname] = useState(pathname);
+  if (menuPathname !== pathname) {
+    setMenuPathname(pathname);
     setActiveLabel(null);
     setMobileOpen(false);
-  }, [pathname]);
+  }
 
   const openMenu = (label: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);

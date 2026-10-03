@@ -48,9 +48,6 @@ export function parseShopSearchParams(
     page,
     filters: {
       category: splitParam(params.category),
-      productType: splitParam(params.type),
-      skinType: splitParam(params.skinType),
-      concern: splitParam(params.concern),
       minPrice: minPrice > PRICE_BOUNDS.min ? minPrice : undefined,
       maxPrice: maxPrice < PRICE_BOUNDS.max ? maxPrice : undefined,
       inStockOnly: params.inStock === "1",

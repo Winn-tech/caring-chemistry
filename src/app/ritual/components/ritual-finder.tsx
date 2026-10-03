@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Sparkles, X } from "lucide-react";
 import type { ProductCardData } from "@/lib/shop/types";
@@ -195,11 +195,6 @@ export function RitualFinder({ products }: RitualFinderProps) {
 
   const currentQuestion = questionOrder[currentStep];
   const progress = ((currentStep + 1) / questionOrder.length) * 100;
-
-  const recommendation = useMemo(() => {
-    if (!answers.concern || !answers.skinType || !answers.complexity) return null;
-    return getRecommendation(answers.concern, answers.skinType, answers.complexity, products);
-  }, [answers, products]);
 
   const updateAnswer = (value: string) => {
     const key = currentQuestion.key;

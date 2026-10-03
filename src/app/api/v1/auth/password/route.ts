@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { errorResponse, ok, ApiError } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
-import { requireAuth } from "@/lib/auth";
-import { audit, clientIp, rateLimit } from "@/lib/security";
+import { adminSessionCookie, requireAuth, signToken } from "@/lib/auth";
+import { audit, rateLimit } from "@/lib/security";
 
 const schema = z.object({
   currentPassword: z.string().min(1).max(128),
@@ -17,7 +17,8 @@ const schema = z.object({
 export async function PATCH(request: Request) {
   try {
     const user = await requireAuth(request);
-    await rateLimit(`password-change:${user.id}:${clientIp(request)}`, 5, 15 * 60 * 1000);
+    // Keyed on the account alone so changing IP address does not reset the limit.
+    await rateLimit(`password-change:${user.id}`, 5, 15 * 60 * 1000);
     const input = schema.parse(await request.json());
     const account = await prisma.user.findUnique({ where: { id: user.id } });
 
@@ -30,6 +31,11 @@ export async function PATCH(request: Request) {
       data: { passwordHash: await bcrypt.hash(input.newPassword, 12) },
     });
     await audit(user.id, "PASSWORD_CHANGED", "User", user.id, request);
-    return ok({ message: "Password changed successfully." });
+    // Changing the password ends every earlier session, including this one, so issue a fresh token.
+    const token = await signToken(user);
+    const response = ok({ message: "Password changed successfully. Other sessions have been signed out.", token });
+    response.cookies.set(adminSessionCookie(token));
+    response.headers.set("Cache-Control", "no-store");
+    return response;
   } catch (error) { return errorResponse(error); }
 }

@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Check, ShieldCheck, Star, Truck } from "lucide-react";
 import { ProductStatus } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { formatNaira } from "@/lib/shop/constants";
 import type { ProductCardData } from "@/lib/shop/types";
 import { Navbar } from "@/app/components/navbar";
 import { Footer } from "@/app/components/footer";
@@ -81,9 +80,6 @@ export default async function ProductPage({ params }: PageProps) {
     take: 4,
   });
 
-  const price = Number(product.price);
-  const compareAtPrice = product.compareAtPrice ? Number(product.compareAtPrice) : null;
-  const hasSale = compareAtPrice !== null && compareAtPrice > price;
   const productImages = product.images.map((image) => ({
     id: image.id,
     url: image.url,
@@ -99,13 +95,6 @@ export default async function ProductPage({ params }: PageProps) {
     image: productImages.map((image) => image.url),
     sku: product.id,
     brand: { "@type": "Brand", name: "Caring Chemistry" },
-    offers: {
-      "@type": "Offer",
-      price: price.toFixed(2),
-      priceCurrency: product.currency,
-      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      url: `/product/${product.slug}`,
-    },
     ...(product.rating !== null
       ? { aggregateRating: { "@type": "AggregateRating", ratingValue: Number(product.rating), reviewCount: product.reviewCount } }
       : {}),
@@ -148,18 +137,6 @@ export default async function ProductPage({ params }: PageProps) {
                 </span>
               </a>
             )}
-
-            <div className="mt-7 flex items-baseline gap-3">
-              <span className="font-display text-3xl font-semibold text-primary-950">{formatNaira(price)}</span>
-              {hasSale && (
-                <>
-                  <span className="text-sm text-[#8a7288] line-through">{formatNaira(compareAtPrice)}</span>
-                  <span className="rounded-full bg-accent-50 px-2.5 py-1 text-xs font-semibold text-accent-700">
-                    On offer
-                  </span>
-                </>
-              )}
-            </div>
 
             <ul className="mt-8 grid gap-3 border-y border-[#e7dbd9] py-6 text-sm text-[#5f4b5b] sm:grid-cols-2">
               {TRUST_POINTS.map(({ icon: Icon, label }) => (

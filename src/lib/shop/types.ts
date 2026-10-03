@@ -6,11 +6,10 @@ export type SortKey =
   | "price-desc"
   | "rating";
 
+// Only filters the product query actually applies. Skin type / concern / product type were
+// removed because products have no such fields; add them to the schema before reintroducing.
 export interface ShopFilters {
   category?: string[];
-  productType?: string[];
-  skinType?: string[];
-  concern?: string[];
   minPrice?: number;
   maxPrice?: number;
   inStockOnly?: boolean;

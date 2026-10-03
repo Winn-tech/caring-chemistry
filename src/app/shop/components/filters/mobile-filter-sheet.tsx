@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildShopHref } from "@/lib/shop/query";
+import { CATEGORY_FILTERS } from "@/lib/shop/constants";
 import type { ShopFilters } from "@/lib/shop/types";
 
 interface MobileFilterSheetProps {
@@ -12,28 +13,14 @@ interface MobileFilterSheetProps {
   onClose: () => void;
 }
 
-const FILTER_GROUPS = {
-  skinType: ["Dry", "Oily", "Combination", "Sensitive"],
-  concern: ["Dullness", "Acne", "Barrier Repair", "Hydration"],
-  productType: ["Cleanser", "Serum", "Moisturizer", "Body Care", "Essentials"],
-};
-
 export function MobileFilterSheet({ filters, open, onClose }: MobileFilterSheetProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const toggleValue = (key: keyof typeof FILTER_GROUPS, value: string) => {
-    const current = filters[key] ?? [];
-    const nextValues = current.includes(value)
-      ? current.filter((item) => item !== value)
-      : [...current, value];
-
-    const paramKey = key === "skinType" ? "skinType" : key === "concern" ? "concern" : "type";
-    router.push(
-      buildShopHref(searchParams, {
-        [paramKey]: nextValues.length ? nextValues.join(",") : null,
-      })
-    );
+  const toggleCategory = (slug: string) => {
+    const current = filters.category ?? [];
+    const next = current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug];
+    router.push(buildShopHref(searchParams, { category: next.length ? next.join(",") : null }));
   };
 
   return (
@@ -69,32 +56,29 @@ export function MobileFilterSheet({ filters, open, onClose }: MobileFilterSheetP
             </div>
 
             <div className="mt-5 space-y-5">
-              {Object.entries(FILTER_GROUPS).map(([key, values]) => (
-                <div key={key}>
-                  <p className="mb-3 text-sm font-medium text-[#2e2032]">
-                    {key === "skinType" ? "Skin type" : key === "concern" ? "Concern" : "Product type"}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {values.map((value) => {
-                      const selected = (filters[key as keyof typeof FILTER_GROUPS] ?? []).includes(value);
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => toggleValue(key as keyof typeof FILTER_GROUPS, value)}
-                          className={`rounded-full border px-3 py-1.5 text-sm ${
-                            selected
-                              ? "border-[#2e2032] bg-[#2e2032] text-[#f8f4f1]"
-                              : "border-[#d8c7ce] bg-white text-[#4d3d50]"
-                          }`}
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
-                  </div>
+              <div>
+                <p className="mb-3 text-sm font-medium text-[#2e2032]">Category</p>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORY_FILTERS.map((category) => {
+                    const selected = (filters.category ?? []).includes(category.slug);
+                    return (
+                      <button
+                        key={category.slug}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => toggleCategory(category.slug)}
+                        className={`rounded-full border px-3 py-1.5 text-sm ${
+                          selected
+                            ? "border-[#2e2032] bg-[#2e2032] text-[#f8f4f1]"
+                            : "border-[#d8c7ce] bg-white text-[#4d3d50]"
+                        }`}
+                      >
+                        {category.label}
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
+              </div>
 
               <label className="flex items-center gap-2 text-sm text-[#4d3d50]">
                 <input

@@ -1,0 +1,10 @@
+# Netlify deploys the Next.js app through its Next.js adapter, detected automatically.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[functions]
+  # Custom functions live here, alongside the ones the Next.js adapter generates.
+  # send-newsletter-background.mts sends newsletter campaigns (up to 15 minutes per run).
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

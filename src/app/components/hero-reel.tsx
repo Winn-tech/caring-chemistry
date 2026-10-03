@@ -40,6 +40,12 @@ const REEL: ReelClip[] = [
     note: "Body care · Soap",
     href: "/shop?category=body-care",
   },
+  {
+    src: "/video/hero-6.mp4",
+    name: "Product Five",
+    note: "Body care · Soap",
+    href: "/shop?category=body-care",
+  },
 ];
 
 export function HeroReel() {
@@ -49,6 +55,23 @@ export function HeroReel() {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
+  const backdrop = useRef<HTMLCanvasElement>(null);
+
+  // Mirror the active clip into a tiny canvas; upscaled and blurred, it fills the frame
+  // around clips whose shape differs from it, so each clip is shown whole with no hard bars.
+  useEffect(() => {
+    const canvas = backdrop.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+    let frame = 0;
+    const draw = () => {
+      const video = videos.current[active];
+      if (video && video.readyState >= 2) context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, [active]);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -76,47 +99,81 @@ export function HeroReel() {
       className="hero-rise relative mx-auto w-full max-w-md"
       style={{ "--hero-delay": "300ms" } as React.CSSProperties}
     >
-      {/* arch */}
-      <div className="hero-arch relative aspect-[4/5] w-full overflow-hidden rounded-t-full rounded-b-[2.5rem] border border-accent-300/30">
-        {REEL.map((clip, i) => (
-          <video
-            key={clip.src}
-            ref={(el) => {
-              videos.current[i] = el;
-            }}
-            src={clip.src}
-            poster={clip.poster}
-            muted
-            playsInline
-            loop={REEL.length === 1}
-            preload={i === active ? "auto" : "metadata"}
+      <div className="group/frame relative isolate">
+        {/* offset back plate for a layered, editorial feel */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 translate-x-3 translate-y-3 rotate-[2.5deg] rounded-[1.75rem] border border-accent-300/25 bg-linear-to-br from-accent-200/10 via-white/[0.03] to-transparent transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/frame:translate-x-4 group-hover/frame:translate-y-4 group-hover/frame:rotate-[4deg]"
+        />
+
+        {/* frame */}
+        <div className="hero-arch relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] border border-accent-300/30 shadow-[0_40px_80px_-30px_rgba(20,0,12,0.85)]">
+          <canvas
+            ref={backdrop}
+            width={36}
+            height={45}
             aria-hidden="true"
-            onTimeUpdate={(e) => {
-              if (i !== active) return;
-              const v = e.currentTarget;
-              if (v.duration) setProgress(v.currentTime / v.duration);
-            }}
-            onPlay={() => i === active && setPlaying(true)}
-            onPause={() => i === active && setPlaying(false)}
-            onEnded={REEL.length > 1 ? next : undefined}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
-              i === active ? "opacity-100" : "opacity-0"
-            }`}
+            className="absolute inset-0 h-full w-full scale-125 opacity-80 blur-2xl"
           />
-        ))}
+          <div aria-hidden="true" className="absolute inset-0 bg-[var(--hero-ink)]/35" />
 
-        {/* tint + inner hairline to seat the video in the palette */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--hero-ink)]/70 via-transparent to-transparent" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-t-full rounded-b-[2rem] border border-accent-200/20" />
+          {REEL.map((clip, i) => (
+            <video
+              key={clip.src}
+              ref={(el) => {
+                videos.current[i] = el;
+              }}
+              src={clip.src}
+              poster={clip.poster}
+              muted
+              playsInline
+              loop={REEL.length === 1}
+              preload={i === active ? "auto" : "metadata"}
+              aria-hidden="true"
+              onTimeUpdate={(e) => {
+                if (i !== active) return;
+                const v = e.currentTarget;
+                if (v.duration) setProgress(v.currentTime / v.duration);
+              }}
+              onPlay={() => i === active && setPlaying(true)}
+              onPause={() => i === active && setPlaying(false)}
+              onEnded={REEL.length > 1 ? next : undefined}
+              className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-1000 ${
+                i === active ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
 
-        <button
-          type="button"
-          onClick={() => setUserPaused(playing)}
-          aria-label={playing ? "Pause product video" : "Play product video"}
-          className="absolute bottom-5 right-5 flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-md outline-none transition-colors hover:bg-black/40 focus-visible:ring-2 focus-visible:ring-accent-200"
-        >
-          {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="ml-0.5 h-3.5 w-3.5" />}
-        </button>
+          {/* soft base tint + inner hairline to seat the video in the palette */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[var(--hero-ink)]/55 to-transparent" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-[1.25rem] border border-accent-200/20" />
+
+          {/* gold crop marks */}
+          {[
+            "left-6 top-6 border-l border-t",
+            "right-6 top-6 border-r border-t",
+            "bottom-6 left-6 border-b border-l",
+            "bottom-6 right-6 border-b border-r",
+          ].map((position) => (
+            <span key={position} aria-hidden="true" className={`pointer-events-none absolute h-4 w-4 border-accent-200/70 ${position}`} />
+          ))}
+
+          {/* clip counter */}
+          <p aria-hidden="true" className="absolute left-10 top-9 font-accent text-sm italic tracking-wide text-accent-100/90">
+            {String(active + 1).padStart(2, "0")}
+            <span className="mx-1.5 text-accent-200/50">/</span>
+            {String(REEL.length).padStart(2, "0")}
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setUserPaused(playing)}
+            aria-label={playing ? "Pause product video" : "Play product video"}
+            className="absolute bottom-8 right-8 flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-md outline-none transition-colors hover:bg-black/40 focus-visible:ring-2 focus-visible:ring-accent-200"
+          >
+            {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="ml-0.5 h-3.5 w-3.5" />}
+          </button>
+        </div>
       </div>
 
       {/* floating: rating */}

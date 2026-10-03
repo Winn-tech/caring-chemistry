@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Home, Search, Sparkles } from "lucide-react";
+import { Home, Search, Sparkles } from "lucide-react";
 
 export default function NotFound() {
   return (

@@ -14,12 +14,12 @@ import type { JournalArticle } from "./journal-data";
 
 export function JournalPageContent({ adminArticles }: { adminArticles: JournalArticle[] }) {
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get("search") ?? "");
+  const query = searchParams.get("search") ?? "";
   const [category, setCategory] = useState(searchParams.get("category") ?? "All");
 
   return (
     <>
-      <JournalHero query={query} onQueryChange={setQuery} />
+      <JournalHero />
       <JournalCategories category={category} onCategoryChange={setCategory} />
       <JournalFeatured />
       <JournalLatest query={query} category={category} concern={searchParams.get("concern") ?? ""} adminArticles={adminArticles} />

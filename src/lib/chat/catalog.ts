@@ -27,11 +27,6 @@ function summarize(text: string) {
     .slice(0, MAX_SUMMARY_CHARS);
 }
 
-function formatPrice(value: unknown, currency: string) {
-  const amount = Number(value);
-  return currency === "NGN" ? `₦${amount.toLocaleString("en-NG")}` : `${currency} ${amount.toFixed(2)}`;
-}
-
 export const getCatalogForAssistant = cached(async () => {
   const products = await prisma.product.findMany({
     where: { status: ProductStatus.ACTIVE, deletedAt: null },
@@ -39,8 +34,6 @@ export const getCatalogForAssistant = cached(async () => {
       name: true,
       slug: true,
       description: true,
-      price: true,
-      currency: true,
       stock: true,
       isBestSeller: true,
       category: { select: { name: true } },
@@ -49,12 +42,14 @@ export const getCatalogForAssistant = cached(async () => {
     take: MAX_PRODUCTS,
   });
 
+  // Prices are deliberately left out: products are sold through retail partners, whose prices
+  // vary, and the product pages do not show one either.
   return products
     .map((p) => {
       const description = summarize(p.description ?? "") || "No description provided.";
       const availability = p.stock > 0 ? "in stock" : "OUT OF STOCK";
       const bestSeller = p.isBestSeller ? " | BEST SELLER" : "";
-      return `- ${p.name} | link: /product/${p.slug} | category: ${p.category.name} | ${formatPrice(p.price, p.currency)} | ${availability}${bestSeller}\n  ${description}`;
+      return `- ${p.name} | link: /product/${p.slug} | category: ${p.category.name} | ${availability}${bestSeller}\n  ${description}`;
     })
     .join("\n");
 });

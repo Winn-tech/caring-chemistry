@@ -6,6 +6,7 @@ import { PostStatus, Role } from "@/generated/prisma/enums";
 import { requireAdminPage } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { auditServer } from "@/lib/security";
+import { BLOG_CATEGORIES } from "@/lib/blog";
 import { z } from "zod";
 
 export type PostFormState = { error?: string };
@@ -14,7 +15,7 @@ const postSchema = z.object({
   title: z.string().trim().min(2).max(180),
   slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   excerpt: optionalText(500),
-  category: z.enum(["Skincare", "Ingredients", "Routines", "Beauty tips", "Wellness"]),
+  category: z.enum(BLOG_CATEGORIES),
   content: z.string().trim().min(20).max(100_000),
   coverUrl: z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : undefined, z.string().url().max(2_000).optional()),
   status: z.enum([PostStatus.DRAFT, PostStatus.PUBLISHED]),
@@ -30,7 +31,7 @@ export async function createPost(_: PostFormState, formData: FormData): Promise<
     const post = await prisma.blogPost.create({ data: { ...result.data, authorId: user.id, publishedAt: result.data.status === PostStatus.PUBLISHED ? new Date() : undefined } });
     await auditServer(user.id, "BLOG_POST_CREATED", "BlogPost", post.id, { status: post.status });
   } catch (cause) { if (isUnique(cause)) return { error: "An article with this slug already exists." }; throw cause; }
-  revalidatePath("/admin/journal"); redirect("/admin/journal");
+  revalidatePath("/admin/journal"); revalidatePath("/journal", "layout"); redirect("/admin/journal");
 }
 
 export async function updatePost(_: PostFormState, formData: FormData): Promise<PostFormState> {
@@ -45,7 +46,7 @@ export async function updatePost(_: PostFormState, formData: FormData): Promise<
     await prisma.blogPost.update({ where: { id }, data: { ...result.data, coverUrl: result.data.coverUrl ?? null, publishedAt: result.data.status === PostStatus.PUBLISHED ? current.publishedAt ?? new Date() : null } });
     await auditServer(user.id, "BLOG_POST_UPDATED", "BlogPost", id, { status: result.data.status });
   } catch (cause) { if (isUnique(cause)) return { error: "An article with this slug already exists." }; throw cause; }
-  revalidatePath("/admin/journal"); revalidatePath(`/admin/journal/${id}`); redirect("/admin/journal");
+  revalidatePath("/admin/journal"); revalidatePath(`/admin/journal/${id}`); revalidatePath("/journal", "layout"); redirect("/admin/journal");
 }
 
 function isUnique(error: unknown) { return typeof error === "object" && error !== null && "code" in error && error.code === "P2002"; }

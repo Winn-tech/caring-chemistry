@@ -3,7 +3,7 @@ import { Reveal } from "../reveal";
 export function OurStory() {
   return (
     <section id="our-story" className="bg-white py-24">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:px-10">
         <Reveal>
           <div className="about-image-panel aspect-4/5 w-full rounded-2xl bg-linear-to-br from-accent-400 via-accent-600 to-primary-900" />
         </Reveal>

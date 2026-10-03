@@ -161,7 +161,7 @@ export function BeautyJournal() {
               {TOPICS.map((topic) => <Link key={topic} href={`/journal?topic=${encodeURIComponent(topic.toLowerCase())}`} className="text-sm font-medium text-primary-800 underline decoration-primary-300 underline-offset-4 transition-colors hover:text-accent-700">{topic}</Link>)}
             </div>
           </div>
-          <Link href="/beauty-guide" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-950 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">Tell us about your skin <ArrowUpRight size={16} /></Link>
+          <Link href="/ritual#ritual-finder" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-950 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5">Tell us about your skin <ArrowUpRight size={16} /></Link>
         </Reveal>
       </div>
     </section>

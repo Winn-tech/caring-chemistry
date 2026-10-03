@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, Check, Plus } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Navbar } from "@/app/components/navbar";
+import { PageHero } from "@/app/components/page-hero";
 import { Footer } from "@/app/components/footer";
 import { RitualFinder } from "./components/ritual-finder";
 import { RitualRoutine } from "./components/ritual-routine";
 import { RitualReveal } from "./components/ritual-reveal";
 import styles from "./ritual.module.css";
+import { getActiveProductCards } from "@/lib/shop/get-products";
 
 export const metadata: Metadata = {
   title: "Your daily ritual | Caring Chemistry",
@@ -26,41 +27,25 @@ const faqs = [
   { question: "What if my skin feels sensitive?", answer: "Keep your routine simple and choose gentle, fragrance-free options where possible. Avoid adding several active ingredients at once. A dermatologist can help you find a routine for ongoing sensitivity or a skin condition." },
 ];
 
-export default function RitualPage() {
+// The finder recommends from live products, so refresh the page at most every 5 minutes
+// instead of freezing the product list at build time.
+export const revalidate = 300;
+
+export default async function RitualPage() {
+  const products = await getActiveProductCards();
+
   return (
     <div className={`${styles.page} bg-[#f9f5f2] text-[#30232d]`}>
       <Navbar />
       <main>
-        <section className="relative mx-auto max-w-7xl px-5 pb-12 pt-8 sm:px-8 lg:px-10 lg:pb-20 lg:pt-12" aria-labelledby="ritual-heading">
-          <p className="mb-8 text-xs text-[#766571]"><Link href="/" className="hover:text-primary-950">Home</Link><span className="mx-3" aria-hidden="true">/</span>Your daily ritual</p>
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-            <RitualReveal>
-              <p className={styles.eyebrow}><span className="mr-2 inline-block h-2 w-2 rounded-full bg-primary-700" />Small moments. Lasting care.</p>
-              <h1 id="ritual-heading" className="mt-6 font-display text-[clamp(3.2rem,7vw,6.5rem)] font-semibold leading-[0.98] tracking-[-0.055em]">Less routine.<br />More <span className="font-accent font-normal italic text-primary-950">ritual.</span></h1>
-              <p className="mt-7 max-w-md text-base leading-relaxed text-[#766571] sm:text-lg">A little care, morning and night. Discover simple steps that work with your skin, not against it.</p>
-              <div className="mt-9 flex flex-col gap-3 min-[400px]:flex-row">
-                <Link href="#ritual-finder" className={styles.button}>Find my ritual <ArrowUpRight size={18} /></Link>
-                <Link href="#daily-ritual" className={styles.secondary}>Explore the steps <ArrowDown size={16} /></Link>
-              </div>
-              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-[#e5d9de] pt-5 text-xs text-[#766571]">
-                <span className="flex items-center gap-2"><Check size={14} className="text-primary-950" />Simple by design</span>
-                <span className="flex items-center gap-2"><Check size={14} className="text-primary-950" />Made for your everyday</span>
-              </div>
-            </RitualReveal>
-            <RitualReveal delay={0.12} className="relative pb-6 pl-4 sm:pl-8">
-              <div className="relative aspect-[4/4.5] overflow-hidden rounded-t-[8rem] rounded-b-[2rem] bg-[#e9ddd7] sm:rounded-t-[11rem]">
-                <Image src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1400&q=85" alt="Skincare essentials arranged for a quiet moment of daily care" fill preload sizes="(max-width: 1024px) 90vw, 45vw" className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#30232d]/60 via-transparent to-transparent" />
-                <p className="absolute bottom-8 left-7 right-7 font-accent text-3xl italic text-white sm:text-4xl">A moment for your skin.<br />A moment for you.</p>
-                <span className="absolute right-5 top-6 rounded-full border border-white/50 bg-white/85 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#30232d]">The everyday edit</span>
-              </div>
-              <div className={`${styles.floatingNote} absolute bottom-0 left-0 flex items-center gap-4 rounded-2xl border border-[#e5d9de] bg-[#fffcf8] px-5 py-4 shadow-lg shadow-[#30232d]/5`}>
-                <span className="font-accent text-4xl italic text-primary-950">01 /</span>
-                <div><p className="text-xs font-semibold">Start with the essentials.</p><p className="mt-1 text-xs text-[#766571]">Build at your own pace.</p></div>
-              </div>
-            </RitualReveal>
-          </div>
-        </section>
+        <PageHero
+          crumb="Your daily ritual"
+          title="Your Daily Ritual"
+          description="Less routine, more ritual. A little care, morning and night - simple steps that work with your skin, not against it."
+          imageSrc="/images/White_Opal_Banner.png"
+          imageAlt="A smiling woman holding a bottle of White Opal lotion"
+          textSide="right"
+        />
 
         <nav aria-label="On this page" className="border-y border-[#e5d9de] bg-[#f2eae6]">
           <div className="mx-auto grid max-w-7xl grid-cols-2 px-5 sm:grid-cols-4 sm:px-8 lg:px-10">
@@ -79,7 +64,7 @@ export default function RitualPage() {
         </section>
 
         <section id="ritual-finder" className="border-y border-[#e5d9de] bg-[#efe4e5] px-5 py-16 sm:px-8 lg:px-10 lg:py-24" aria-label="Find your ritual">
-          <RitualFinder />
+          <RitualFinder products={products} />
         </section>
 
         <section id="ingredients" className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-24" aria-labelledby="ingredients-heading">

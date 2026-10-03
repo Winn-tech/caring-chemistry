@@ -10,7 +10,7 @@ const PRINCIPLES = [
 export function OurPhilosophy() {
   return (
     <section id="our-philosophy" className="bg-[#F7F3EF] py-24">
-      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal className="max-w-xl">
           <span className="font-accent text-lg italic text-accent-600">Our Philosophy</span>
           <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-primary-950 sm:text-4xl">Beauty, with intention.</h2>

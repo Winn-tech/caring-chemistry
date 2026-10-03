@@ -4,7 +4,7 @@ import { PaymentStatus, Role } from "@/generated/prisma/client";
 import { requireAdminPage } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AdminShell } from "../../components/admin-shell";
-import { allowedNextStatuses } from "../actions";
+import { allowedNextStatuses } from "@/lib/order-status";
 import { OrderStatusForm } from "../components/order-status-form";
 import { IssueInvoiceForm } from "../../invoices/components/issue-invoice-form";
 

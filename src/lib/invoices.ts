@@ -1,4 +1,4 @@
-import { PaymentStatus, Prisma } from "@/generated/prisma/client";
+import { OrderStatus, PaymentStatus, Prisma } from "@/generated/prisma/client";
 import { ApiError } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
 
@@ -120,7 +120,7 @@ export async function issueCreditNoteForRefundedOrder(orderId: string, reason = 
 
 /**
  * Applies the financial side of a full refund atomically: retain/issue the
- * original invoice, mark payment refunded, then create the matching credit note.
+ * original invoice, mark the payment and order refunded, then create the matching credit note.
  */
 export async function refundOrderAndIssueCreditNote(orderId: string, reason = "Order refunded") {
   return prisma.$transaction(async (tx) => {
@@ -136,7 +136,7 @@ export async function refundOrderAndIssueCreditNote(orderId: string, reason = "O
     const invoice = order.invoice ?? await createInvoice(tx, order);
     await tx.order.update({
       where: { id: order.id },
-      data: { paymentStatus: PaymentStatus.REFUNDED },
+      data: { paymentStatus: PaymentStatus.REFUNDED, status: OrderStatus.REFUNDED },
     });
 
     const existing = order.invoice?.creditNotes.find((note) => note.orderId === order.id);

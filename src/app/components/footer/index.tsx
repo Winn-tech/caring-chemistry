@@ -48,12 +48,14 @@ const linkUnderline =
 export function Footer() {
   return (
     <footer className="w-full">
-      <div className="relative isolate w-full overflow-hidden bg-primary-950 text-white">
+      {/* Same backdrop as the homepage hero (.hero-luxe + grain in globals.css). */}
+      <div className="hero-luxe relative isolate w-full overflow-hidden text-white">
+        <div aria-hidden className="hero-grain pointer-events-none absolute inset-0 -z-10" />
         {/* slow-drifting brand glows */}
         <div aria-hidden className="footer-glow pointer-events-none absolute -left-32 -top-40 -z-10 h-[28rem] w-[28rem] rounded-full bg-primary-700/35 blur-[120px]" />
         <div aria-hidden className="footer-glow footer-glow-alt pointer-events-none absolute -bottom-48 -right-24 -z-10 h-[26rem] w-[26rem] rounded-full bg-accent-500/20 blur-[120px]" />
 
-        <div className="mx-auto max-w-7xl px-6 pt-16 sm:pt-20 lg:px-12">
+        <div className="mx-auto max-w-7xl px-6 pt-16 sm:pt-20 lg:px-10">
           {/* newsletter */}
           <FooterStagger className="grid gap-10 border-b border-white/10 pb-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
             <FooterItem>
@@ -141,7 +143,7 @@ export function Footer() {
         </div>
 
         {/* bottom bar */}
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/10 px-6 py-6 text-xs text-white/45 sm:flex-row lg:px-12">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/10 px-6 py-6 text-xs text-white/45 sm:flex-row lg:px-10">
           <p>© {new Date().getFullYear()} Caring Chemistry. All rights reserved.</p>
           <p className="font-accent text-sm italic text-white/55">Small moments. Lasting care.</p>
         </div>

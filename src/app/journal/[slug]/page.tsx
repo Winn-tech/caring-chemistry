@@ -7,14 +7,16 @@ import { Navbar } from "../../components/navbar";
 import { Reveal } from "../../components/reveal";
 import { NewsletterModal } from "../../components/newsletter-modal";
 import { JOURNAL_ARTICLES } from "../journal-data";
+import { getPublishedJournalArticle } from "../journal-posts";
 
+// Built-in articles are prerendered; posts published from the admin are rendered on request.
 export function generateStaticParams() {
   return JOURNAL_ARTICLES.map((article) => ({ slug: article.slug }));
 }
 
 export default async function JournalArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = JOURNAL_ARTICLES.find((item) => item.slug === slug);
+  const article = (await getPublishedJournalArticle(slug)) ?? JOURNAL_ARTICLES.find((item) => item.slug === slug);
 
   if (!article) notFound();
 
@@ -36,10 +38,10 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
         <div className="mx-auto grid max-w-4xl gap-12 px-6 py-16 lg:grid-cols-[9rem_1fr] lg:px-10 lg:py-24">
           <aside className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-400">In this guide</aside>
           <div className="max-w-2xl space-y-7 text-base leading-[1.9] text-primary-800">
-            {article.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {article.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             <div className="border-t border-primary-200 pt-8">
               <p className="font-accent text-3xl italic text-accent-700">Keep it considered.</p>
-              <Link href="/beauty-guide" className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary-950">Build your routine <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+              <Link href="/ritual#ritual-finder" className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary-950">Build your routine <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
             </div>
           </div>
         </div>

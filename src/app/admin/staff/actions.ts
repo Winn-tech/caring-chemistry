@@ -10,6 +10,8 @@ import { z } from "zod";
 export type StaffActionState = { error?: string; success?: string };
 const inputSchema = z.object({ name: z.string().trim().min(2).max(100), email: z.string().trim().toLowerCase().email(), role: z.enum(STAFF_ROLES) });
 const idSchema = z.string().cuid();
+// Prisma's `in` filter needs a mutable array; STAFF_ROLES is readonly.
+const staffRoles: Role[] = [...STAFF_ROLES];
 const refresh = () => revalidatePath("/admin/staff");
 const errorMessage = (error: unknown) => error instanceof Error ? error.message : "Unable to complete that staff action.";
 
@@ -37,7 +39,7 @@ export async function updateStaff(_: StaffActionState, formData: FormData): Prom
   const actor = await requireAdminPage([Role.GENERAL_ADMIN]); const id = idSchema.safeParse(formData.get("id")); const input = inputSchema.safeParse({ name: formData.get("name"), email: formData.get("email"), role: formData.get("role") });
   if (!id.success || !input.success) return { error: "Review the staff details." };
   try {
-    const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: STAFF_ROLES } }, select: { role: true } });
+    const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: staffRoles } }, select: { role: true } });
     if (!target) return { error: "Staff account not found." };
     await prisma.$transaction([prisma.user.update({ where: { id: id.data }, data: input.data }), prisma.auditLog.create({ data: { actorId: actor.id, action: target.role === input.data.role ? "UPDATE" : "CHANGE_ROLE", entity: "User", entityId: id.data, metadata: { previousRole: target.role, role: input.data.role } } })]);
     refresh(); return { success: "Staff account updated." };
@@ -47,7 +49,7 @@ export async function updateStaff(_: StaffActionState, formData: FormData): Prom
 export async function updateStaffStatus(_: StaffActionState, formData: FormData): Promise<StaffActionState> {
   const actor = await requireAdminPage([Role.GENERAL_ADMIN]); const id = idSchema.safeParse(formData.get("id")); const active = z.enum(["true", "false"]).safeParse(formData.get("isActive"));
   if (!id.success || !active.success) return { error: "Invalid staff account." };
-  const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: STAFF_ROLES } }, select: { invitationAcceptedAt: true } });
+  const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: staffRoles } }, select: { invitationAcceptedAt: true } });
   if (!target) return { error: "Staff account not found." };
   if (active.data === "true" && !target.invitationAcceptedAt) return { error: "This account must accept its invitation first." };
   await prisma.$transaction([prisma.user.update({ where: { id: id.data }, data: { isActive: active.data === "true" } }), prisma.auditLog.create({ data: { actorId: actor.id, action: active.data === "true" ? "ACTIVATE_STAFF" : "DEACTIVATE_STAFF", entity: "User", entityId: id.data } })]);
@@ -56,7 +58,7 @@ export async function updateStaffStatus(_: StaffActionState, formData: FormData)
 
 export async function resendStaffInvitation(_: StaffActionState, formData: FormData): Promise<StaffActionState> {
   const actor = await requireAdminPage([Role.GENERAL_ADMIN]); const id = idSchema.safeParse(formData.get("id")); if (!id.success) return { error: "Invalid staff account." };
-  const staff = await prisma.user.findFirst({ where: { id: id.data, role: { in: STAFF_ROLES }, invitationAcceptedAt: null }, select: { id: true, name: true, email: true } });
+  const staff = await prisma.user.findFirst({ where: { id: id.data, role: { in: staffRoles }, invitationAcceptedAt: null }, select: { id: true, name: true, email: true } });
   if (!staff) return { error: "Only pending accounts can receive a new invitation." };
   const invitation = createInvitationToken();
   try {
@@ -72,7 +74,7 @@ export async function deleteStaff(_: StaffActionState, formData: FormData): Prom
   const id = idSchema.safeParse(formData.get("id"));
   if (!id.success) return { error: "Invalid staff account." };
   try {
-    const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: STAFF_ROLES } }, select: { id: true } });
+    const target = await prisma.user.findFirst({ where: { id: id.data, role: { in: staffRoles } }, select: { id: true } });
     if (!target) return { error: "Staff account not found." };
     await prisma.$transaction([
       prisma.user.delete({ where: { id: id.data } }),

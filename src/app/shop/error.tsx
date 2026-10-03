@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function ShopError({
@@ -17,7 +18,7 @@ export default function ShopError({
     <div className="bg-[#f8f4f1] min-h-[70vh] flex items-center justify-center px-6">
       <div className="max-w-md text-center">
         <p className="font-accent text-2xl text-[#2e2032]">
-          We couldn't load the shop
+          We couldn&apos;t load the shop
         </p>
         <p className="mt-2 text-sm text-[#5b4d5f]">
           Something went wrong retrieving products. Try again, or head back to the homepage.
@@ -29,12 +30,12 @@ export default function ShopError({
           >
             Try again
           </button>
-          <a
+          <Link
             href="/"
             className="rounded-md border border-[#d8c7ce] px-5 py-2.5 text-sm font-medium text-[#2e2032] transition-colors hover:bg-[#f3ece8]"
           >
             Go home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

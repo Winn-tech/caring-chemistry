@@ -1,11 +1,16 @@
-import { ProductStatus } from "@/generated/prisma/client";
+import { Prisma, ProductStatus } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PAGE_SIZE } from "./constants";
 import type { ParsedShopQuery, ProductCardData, ShopResult, SortKey } from "./types";
 
-function mapProductToCard(product: any): ProductCardData {
-  const images = Array.isArray(product.images) ? product.images : [];
-  const mainImage = images.find((img: any) => img?.position === 0) ?? images[0] ?? null;
+type ProductWithCardRelations = Prisma.ProductGetPayload<{ include: { category: true; images: true } }>;
+
+// Sample products are a development aid only; in production a failed query must surface as an error.
+const USE_MOCK_FALLBACK = process.env.NODE_ENV !== "production";
+
+function mapProductToCard(product: ProductWithCardRelations): ProductCardData {
+  const images = product.images;
+  const mainImage = images.find((img) => img.position === 0) ?? images[0] ?? null;
 
   return {
     id: product.id,
@@ -111,7 +116,7 @@ function buildMockProducts(): ProductCardData[] {
   ];
 }
 
-function buildOrderBy(sort: SortKey) {
+function buildOrderBy(sort: SortKey): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case "newest":
       return [{ createdAt: "desc" }];
@@ -122,15 +127,16 @@ function buildOrderBy(sort: SortKey) {
     case "rating":
       return [{ rating: "desc" }, { reviewCount: "desc" }];
     case "best-selling":
-      return [{ isBestSeller: "desc" }, { createdAt: "desc" }];
+      // Flagged best sellers first, then the most-reviewed as a popularity signal.
+      return [{ isBestSeller: "desc" }, { reviewCount: "desc" }, { createdAt: "desc" }];
     case "featured":
     default:
       return [{ isBestSeller: "desc" }, { createdAt: "desc" }];
   }
 }
 
-function buildWhere(filters: ParsedShopQuery["filters"]) {
-  const where: Record<string, unknown> = {
+function buildWhere(filters: ParsedShopQuery["filters"]): Prisma.ProductWhereInput {
+  const where: Prisma.ProductWhereInput = {
     status: ProductStatus.ACTIVE,
     deletedAt: null,
   };
@@ -183,6 +189,7 @@ export async function getProducts(query: ParsedShopQuery): Promise<ShopResult> {
       totalPages,
     };
   } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
     console.warn("Falling back to mock shop data because the product query failed:", error);
 
     const allProducts = buildMockProducts();
@@ -213,6 +220,22 @@ export async function getProducts(query: ParsedShopQuery): Promise<ShopResult> {
   }
 }
 
+/** Active products as cards, best sellers first — for features that match across the catalogue (e.g. the ritual finder). */
+export async function getActiveProductCards(limit = 60): Promise<ProductCardData[]> {
+  try {
+    const rows = await prisma.product.findMany({
+      where: { status: ProductStatus.ACTIVE, deletedAt: null },
+      orderBy: buildOrderBy("featured"),
+      take: limit,
+      include: { category: true, images: { orderBy: { position: "asc" } } },
+    });
+    return rows.map(mapProductToCard);
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
+    return buildMockProducts();
+  }
+}
+
 export async function getCatalogSize(): Promise<number> {
   try {
     return await prisma.product.count({
@@ -221,7 +244,8 @@ export async function getCatalogSize(): Promise<number> {
         deletedAt: null,
       },
     });
-  } catch {
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
     return buildMockProducts().length;
   }
 }

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function AdminLoginForm() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -15,13 +17,16 @@ export function AdminLoginForm() {
     try {
       const response = await fetch("/api/v1/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        // Cookie-only: the session token stays in the httpOnly cookie, out of reach of page scripts.
+        headers: { "Content-Type": "application/json", "X-Session-Mode": "cookie" },
         credentials: "same-origin",
         body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
       });
       const body = await response.json().catch(() => null);
       if (!response.ok) throw new Error(body?.error ?? "Unable to sign in.");
-      window.location.assign("/admin/dashboard");
+      // The session cookie is now set; the dashboard's server check reads it on navigation.
+      router.replace("/admin/dashboard");
+      router.refresh();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to sign in.");
       setPending(false);

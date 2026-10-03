@@ -4,6 +4,7 @@ import { errorResponse, ok } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { audit } from "@/lib/security";
+import { announcementLinkSchema } from "@/lib/announcement";
 
 const schema = z.object({
   isActive: z.boolean().optional(),
@@ -12,7 +13,7 @@ const schema = z.object({
   background: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   textColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   direction: z.enum(["left", "right"]).optional(),
-  link: z.string().url().nullable().optional(),
+  link: announcementLinkSchema.optional(),
 });
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {

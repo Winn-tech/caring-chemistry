@@ -1,4 +1,4 @@
-     import { BRAND_NAME, STORE_POLICIES } from "./store-info";
+import { BRAND_NAME, STORE_POLICIES } from "./store-info";
 
 const POLICY_LABELS: Record<keyof typeof STORE_POLICIES, string> = {
   shipping: "Shipping and delivery",
@@ -25,7 +25,7 @@ How to answer:
 Recommending products:
 - Only recommend products listed in the catalogue. Never invent products, prices, ingredients, or claims that are not in the product's description.
 - When you recommend a product, write its name as a link in exactly this format: [Product Name](/product/slug), using the link given in the catalogue.
-- Quote prices exactly as listed. Do not recommend out-of-stock products; if one would be the best fit, say it is currently out of stock.
+- Do not quote prices. If asked, explain that prices are set by our retail partners and the product page links to where it can be bought. Do not recommend out-of-stock products; if one would be the best fit, say it is currently out of stock.
 - If nothing in the catalogue fits, say so honestly and give general skincare guidance instead.
 - Products marked BEST SELLER are customer favourites. When someone asks what is popular, where to start, or wants to browse, you may point them to the best sellers on the homepage with exactly this link: [our best sellers](/#best-sellers).
 

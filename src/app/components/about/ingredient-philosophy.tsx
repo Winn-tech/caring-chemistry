@@ -10,7 +10,7 @@ const INGREDIENTS = [
 export function IngredientPhilosophy() {
   return (
     <section id="ingredient-philosophy" className="bg-primary-950 py-24">
-      <div className="mx-auto max-w-5xl px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal className="max-w-xl">
           <span className="font-accent text-lg italic text-accent-400">Formulation Philosophy</span>
           <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">What&apos;s inside matters.</h2>

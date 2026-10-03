@@ -1,4 +1,5 @@
 import { createHash, createHmac } from "node:crypto";
+import { prisma } from "@/lib/prisma";
 
 export function createUnsubscribeToken(email: string) {
   const token = unsubscribeTokenForEmail(email);
@@ -17,6 +18,15 @@ export function hashUnsubscribeToken(token: string) {
 
 export function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
+}
+
+/** Deactivates the subscription an unsubscribe link belongs to. Returns false if the link matches no subscriber. */
+export async function unsubscribeByToken(token: string) {
+  const result = await prisma.newsletterSubscriber.updateMany({
+    where: { unsubscribeTokenHash: hashUnsubscribeToken(token) },
+    data: { isActive: false },
+  });
+  return result.count > 0;
 }
 
 export function htmlEscape(value: string) {
@@ -67,20 +77,28 @@ async function postBatch(apiKey: string, emails: object[]) {
  * Returns how many emails Resend accepted; on failure the error carries no count, so callers
  * should track progress through `onBatchSent`.
  */
-export async function sendNewsletterBatches(input: { emails: string[]; subject: string; content: string; onBatchSent?: (sentSoFar: number) => void }) {
+export async function sendNewsletterBatches(input: { emails: string[]; subject: string; content: string; onBatchSent?: (sentSoFar: number) => void | Promise<void> }) {
   const settings = config();
   let sent = 0;
   for (let index = 0; index < input.emails.length; index += BATCH_SIZE) {
     if (index > 0) await wait(BATCH_INTERVAL_MS);
-    const batch = input.emails.slice(index, index + BATCH_SIZE).map((email) => ({
-      from: settings.from,
-      to: [email],
-      subject: input.subject,
-      html: renderNewsletterHtml(input.content, `${settings.appUrl}/newsletter/unsubscribe/${unsubscribeTokenForEmail(email)}`),
-    }));
+    const batch = input.emails.slice(index, index + BATCH_SIZE).map((email) => {
+      const token = unsubscribeTokenForEmail(email);
+      return {
+        from: settings.from,
+        to: [email],
+        subject: input.subject,
+        html: renderNewsletterHtml(input.content, `${settings.appUrl}/newsletter/unsubscribe/${token}`),
+        // One-click unsubscribe (RFC 8058), expected by Gmail and Yahoo from bulk senders.
+        headers: {
+          "List-Unsubscribe": `<${settings.appUrl}/api/newsletter/unsubscribe/${token}>`,
+          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
+      };
+    });
     await postBatch(settings.apiKey, batch);
     sent += batch.length;
-    input.onBatchSent?.(sent);
+    await input.onBatchSent?.(sent);
   }
   return sent;
 }

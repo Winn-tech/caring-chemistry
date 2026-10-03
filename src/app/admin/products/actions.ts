@@ -7,6 +7,7 @@ import { requireAdminPage } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { auditServer } from "@/lib/security";
 import { externalUrlSchema } from "@/lib/where-to-buy";
+import { deleteProductImage } from "@/lib/cloudinary";
 import { z } from "zod";
 
 export type ProductFormState = { error?: string };
@@ -114,12 +115,22 @@ export async function updateProduct(_: ProductFormState, formData: FormData): Pr
   if ("error" in retailerLinks) return { error: retailerLinks.error };
   if (!(await validateRetailerLinks(retailerLinks.links))) return { error: "One or more selected retailers are no longer active." };
 
+  let replacedPublicId: string | null = null;
   try {
     await prisma.$transaction(async (tx) => {
-      await tx.product.update({
-        where: { id, deletedAt: null },
-        data: { ...productData, images: { deleteMany: {}, ...(imageUrl ? { create: { url: imageUrl, publicId: imagePublicId, position: 0 } } : {}) } },
-      });
+      await tx.product.update({ where: { id, deletedAt: null }, data: productData });
+
+      // The editor manages only the main image; any further gallery images are left untouched.
+      const primary = await tx.productImage.findFirst({ where: { productId: id }, orderBy: { position: "asc" } });
+      if (imageUrl && primary?.url !== imageUrl) {
+        if (primary) await tx.productImage.update({ where: { id: primary.id }, data: { url: imageUrl, publicId: imagePublicId ?? null } });
+        else await tx.productImage.create({ data: { productId: id, url: imageUrl, publicId: imagePublicId, position: 0 } });
+        replacedPublicId = primary?.publicId ?? null;
+      } else if (!imageUrl && primary) {
+        await tx.productImage.delete({ where: { id: primary.id } });
+        replacedPublicId = primary.publicId;
+      }
+
       await saveRetailerLinks(tx, id, retailerLinks.links);
     });
     await auditServer(user.id, "PRODUCT_UPDATED", "Product", id, { status: result.data.status });
@@ -127,6 +138,9 @@ export async function updateProduct(_: ProductFormState, formData: FormData): Pr
     if (isUniqueError(cause)) return { error: "A product with this slug already exists." };
     return { error: "The product could not be updated. It may have been archived." };
   }
+
+  // Remove the replaced file from Cloudinary only after the database change has committed.
+  if (replacedPublicId) await deleteProductImage(replacedPublicId);
 
   revalidatePath("/admin/products");
   redirect("/admin/products");

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { buildShopHref } from "@/lib/shop/query";
-import { formatNaira } from "@/lib/shop/constants";
+import { categoryLabel, formatNaira } from "@/lib/shop/constants";
 import type { ShopFilters } from "@/lib/shop/types";
 
 interface Chip {
@@ -17,29 +17,20 @@ interface ActiveFiltersProps {
   filters: ShopFilters;
 }
 
-const PARAM_MAP: Record<"category" | "productType" | "skinType" | "concern", string> = {
-  category: "category",
-  productType: "type",
-  skinType: "skinType",
-  concern: "concern",
-};
-
 export function ActiveFilters({ filters }: ActiveFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const chips: Chip[] = [];
 
-  (["category", "productType", "skinType", "concern"] as const).forEach((group) => {
-    filters[group]?.forEach((value) => {
-      chips.push({
-        key: `${group}:${value}`,
-        label: value,
-        remove: () => {
-          const remaining = (filters[group] ?? []).filter((v) => v !== value);
-          return { [PARAM_MAP[group]]: remaining.length ? remaining.join(",") : null };
-        },
-      });
+  filters.category?.forEach((slug) => {
+    chips.push({
+      key: `category:${slug}`,
+      label: categoryLabel(slug),
+      remove: () => {
+        const remaining = (filters.category ?? []).filter((value) => value !== slug);
+        return { category: remaining.length ? remaining.join(",") : null };
+      },
     });
   });
 

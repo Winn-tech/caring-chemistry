@@ -21,12 +21,13 @@ export function ShopHeader({ title, count, imageUrl }: ShopHeaderProps) {
 
   if (imageUrl) {
     return (
-      <header className="relative w-full h-96 rounded-2xl overflow-hidden mb-8">
+      <header className="relative w-full h-102 rounded-2xl overflow-hidden mb-8">
         <Image
           src={imageUrl}
           alt={title}
           fill
-          className="object-cover"
+          sizes="(max-width: 1280px) 100vw, 1200px"
+          className="object-cover object-right sm:object-center"
           priority
         />
         <div className="absolute inset-0 bg-black/30" />
@@ -43,7 +44,7 @@ export function ShopHeader({ title, count, imageUrl }: ShopHeaderProps) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 text-lg leading-relaxed text-white/90 max-w-2xl"
+            className="mt-4 hidden text-lg leading-relaxed text-white/90 max-w-2xl sm:block"
           >
             {description}
           </motion.p>

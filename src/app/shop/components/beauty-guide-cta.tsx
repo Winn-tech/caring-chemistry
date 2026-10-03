@@ -7,10 +7,10 @@ export function BeautyGuideCta() {
       <div className="max-w-md">
         <h2 className="font-accent text-2xl text-[#f8f4f1]">Not sure what you need?</h2>
         <p className="mt-2 text-sm leading-relaxed text-[#f8f4f1]/70">
-          Tell us about your skin and we'll help you find the right products — in under two minutes.
+          Tell us about your skin and we&apos;ll help you find the right products — in under two minutes.
         </p>
         <Link
-          href="/routine-finder"
+          href="/ritual#ritual-finder"
           className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-[#f8f4f1] px-5 py-2.5 text-sm font-medium text-[#2e2032] transition-colors hover:bg-[#efe6e0]"
         >
           Find my routine

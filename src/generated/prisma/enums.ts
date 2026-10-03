@@ -70,6 +70,7 @@ export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
 
 export const NewsletterCampaignStatus = {
   DRAFT: 'DRAFT',
+  QUEUED: 'QUEUED',
   SENDING: 'SENDING',
   SENT: 'SENT',
   FAILED: 'FAILED'

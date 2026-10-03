@@ -16,6 +16,13 @@ export const CATEGORY_NAV = [
   { slug: "essentials", label: "Essentials" },
 ] as const;
 
+/** Real categories (without the "All" pseudo-entry), for filter checkboxes and labels. */
+export const CATEGORY_FILTERS = CATEGORY_NAV.filter((category) => category.slug !== "all");
+
+export function categoryLabel(slug: string) {
+  return CATEGORY_NAV.find((category) => category.slug === slug)?.label ?? slug;
+}
+
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "featured", label: "Featured" },
   { value: "newest", label: "Newest" },

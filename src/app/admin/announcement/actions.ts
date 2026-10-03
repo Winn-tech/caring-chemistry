@@ -6,11 +6,11 @@ import { AnnouncementDirection, Role } from "@/generated/prisma/enums";
 import { requireAdminPage } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { auditServer } from "@/lib/security";
+import { announcementLinkSchema } from "@/lib/announcement";
 import { z } from "zod";
 
 export type AnnouncementFormState = { error?: string; success?: string };
-const link = z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : null, z.string().max(2_000).nullable().refine((value) => value === null || (value.startsWith("/") && !value.startsWith("//")) || /^https:\/\//i.test(value), "Use a site path starting with / or a secure https:// URL."));
-const schema = z.object({ content: z.string().trim().min(1).max(500), isActive: z.boolean(), speed: z.coerce.number().int().min(10).max(1_000), background: z.string().regex(/^#[0-9a-fA-F]{6}$/), textColor: z.string().regex(/^#[0-9a-fA-F]{6}$/), direction: z.enum(["left", "right"]), link });
+const schema = z.object({ content: z.string().trim().min(1).max(500), isActive: z.boolean(), speed: z.coerce.number().int().min(10).max(1_000), background: z.string().regex(/^#[0-9a-fA-F]{6}$/), textColor: z.string().regex(/^#[0-9a-fA-F]{6}$/), direction: z.enum(["left", "right"]), link: announcementLinkSchema });
 
 export async function saveAnnouncement(_: AnnouncementFormState, formData: FormData): Promise<AnnouncementFormState> {
   const user = await requireAdminPage([Role.GENERAL_ADMIN, Role.SOCIAL_TEAM]);

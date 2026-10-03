@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 type CloudinaryConfig = { cloudName: string; apiKey: string; apiSecret: string };
 type UploadedImage = { url: string; publicId: string };
@@ -14,6 +14,29 @@ function config(): CloudinaryConfig | null {
 }
 
 export function isCloudinaryConfigured() { return config() !== null; }
+
+/**
+ * Deletes an uploaded image that is no longer referenced. Best effort: a failure is logged,
+ * never thrown, because the database change it follows has already been saved.
+ */
+export async function deleteProductImage(publicId: string) {
+  const credentials = config();
+  if (!credentials) return;
+  try {
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    // Signed parameters, sorted alphabetically, followed by the API secret (Cloudinary's signing scheme).
+    const signature = createHash("sha1").update(`public_id=${publicId}&timestamp=${timestamp}${credentials.apiSecret}`).digest("hex");
+    const body = new FormData();
+    body.append("public_id", publicId);
+    body.append("timestamp", timestamp);
+    body.append("api_key", credentials.apiKey);
+    body.append("signature", signature);
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${credentials.cloudName}/image/destroy`, { method: "POST", body, cache: "no-store" });
+    if (!response.ok) console.error("Cloudinary image deletion failed", publicId, response.status);
+  } catch (error) {
+    console.error("Cloudinary image deletion failed", publicId, error);
+  }
+}
 
 export async function uploadProductImage(file: File): Promise<UploadedImage> {
   const credentials = config();

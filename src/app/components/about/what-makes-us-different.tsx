@@ -62,7 +62,7 @@ export function WhatMakesUsDifferent() {
         className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-primary-100/60 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal className="max-w-xl">
           <span className="font-accent text-lg italic bg-linear-to-r from-accent-700 to-primary-700 bg-clip-text text-transparent">
             What Makes Us Different
@@ -83,7 +83,7 @@ export function WhatMakesUsDifferent() {
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {DIFFERENTIATORS.map(({ icon: Icon, number, title, description }, index) => (
+          {DIFFERENTIATORS.map(({ number, title, description }, index) => (
             <Reveal key={number} delay={index * 100}>
               <div className="wmud-card group relative h-full overflow-hidden rounded-3xl border border-primary-100 bg-white p-7 shadow-[0_10px_30px_-15px_rgba(168,13,97,0.15)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_50px_-20px_rgba(198,42,126,0.35)]">
                 {/* Gradient wash on hover */}

@@ -27,6 +27,9 @@ const schema = z.object({
   isBestSeller: z.boolean().default(false),
   categoryId: z.string().cuid(),
   images: z.array(image).max(10).optional(),
+}).refine((value) => value.compareAtPrice === undefined || value.compareAtPrice >= value.price, {
+  message: "Compare-at price must be at least the selling price.",
+  path: ["compareAtPrice"],
 });
 
 export async function GET(request: Request) {
