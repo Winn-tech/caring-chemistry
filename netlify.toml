@@ -3,6 +3,12 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  # Turbopack's build cache records environment values so it knows when to rebuild. Netlify keeps
+  # that cache privately between builds and never publishes it, so the secrets scanner may skip it.
+  # The published output is still scanned.
+  SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/**"
+
 [functions]
   # Custom functions live here, alongside the ones the Next.js adapter generates.
   # send-newsletter-background.mts sends newsletter campaigns (up to 15 minutes per run).
