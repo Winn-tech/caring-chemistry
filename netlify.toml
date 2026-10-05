@@ -8,6 +8,9 @@
   # that cache privately between builds and never publishes it, so the secrets scanner may skip it.
   # The published output is still scanned.
   SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/**"
+  # Plain settings, not secrets. Their real values may match the examples in .env.example,
+  # which would otherwise make the scanner fail the build.
+  SECRETS_SCAN_OMIT_KEYS = "CLOUDINARY_PRODUCT_FOLDER,GEMINI_MODEL,MAX_IMAGE_UPLOAD_BYTES,NEWSLETTER_SEND_MODE,TRUSTED_IP_HEADER,APP_URL,RESEND_FROM_EMAIL"
 
 [functions]
   # Custom functions live here, alongside the ones the Next.js adapter generates.
