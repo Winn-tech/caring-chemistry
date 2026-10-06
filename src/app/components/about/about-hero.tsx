@@ -11,6 +11,7 @@ export function AboutHero() {
       imageSrc="/images/body-treat.png"
       imageAlt="A woman with glowing skin holding a jar of Body Treat"
       textSide="right"
+      mobileFocus="left"
     >
       <div className="flex justify-center">
         <Link

@@ -45,6 +45,7 @@ export default async function RitualPage() {
           imageSrc="/images/White_Opal_Banner.png"
           imageAlt="A smiling woman holding a bottle of White Opal lotion"
           textSide="right"
+          mobileFocus="left"
         />
 
         <nav aria-label="On this page" className="border-y border-[#e5d9de] bg-[#f2eae6]">

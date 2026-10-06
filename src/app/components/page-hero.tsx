@@ -15,8 +15,13 @@ interface PageHeroProps {
   description: string;
   imageSrc: string;
   imageAlt: string;
-  /** The image's empty side. Text sits there, and phones crop the image to it. */
+  /** The image's empty side, where the text sits. */
   textSide: "left" | "right";
+  /**
+   * Which side of the image phones keep when they crop it to the banner's narrower shape.
+   * Defaults to `textSide`; set it to the subject's side to keep the person in view instead.
+   */
+  mobileFocus?: "left" | "right";
   /** Optional content under the banner, e.g. a scroll cue. */
   children?: ReactNode;
 }
@@ -26,7 +31,7 @@ interface PageHeroProps {
  * full-width image in its own 16:9 shape on larger screens, with dark text over the
  * image's plain side.
  */
-export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSide, children }: PageHeroProps) {
+export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSide, mobileFocus = textSide, children }: PageHeroProps) {
   const right = textSide === "right";
 
   return (
@@ -56,9 +61,15 @@ export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSi
             fill
             priority
             sizes="(max-width: 1280px) 100vw, 1200px"
-            className={`object-cover sm:object-center ${right ? "object-right" : "object-left"}`}
+            className={`object-cover sm:object-center ${mobileFocus === "right" ? "object-right" : "object-left"}`}
           />
-          {/* Text sits on the image's plain side, so it uses dark ink rather than white. */}
+          {/* Phones only: the title is white there, so a soft shade behind the title's side keeps it
+              readable on these light images. Larger screens show the image unshaded. */}
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 from-black/55 via-black/25 to-transparent sm:hidden ${right ? "bg-linear-to-l" : "bg-linear-to-r"}`}
+          />
+          {/* From tablet width up the text sits on the image's plain side, so it uses dark ink. */}
           <div
             className={`relative flex h-full flex-col justify-center px-6 sm:px-10 lg:px-16 ${
               right ? "items-end text-right" : "items-start text-left"
@@ -68,7 +79,7 @@ export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSi
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, ease: EASE }}
-              className="max-w-md font-accent text-4xl tracking-tight text-[#2e2032] sm:text-5xl lg:text-6xl"
+              className="max-w-md font-accent text-4xl tracking-tight text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.35)] sm:text-5xl sm:text-[#2e2032] sm:[text-shadow:none] lg:text-6xl"
             >
               {title}
             </motion.h1>

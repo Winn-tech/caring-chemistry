@@ -9,6 +9,7 @@ export function JournalHero() {
       imageSrc="/images/Radience_1.png"
       imageAlt="A woman with glowing skin holding a jar of Radiance complexion cream"
       textSide="left"
+      mobileFocus="right"
     />
   );
 }
