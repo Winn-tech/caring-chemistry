@@ -57,7 +57,6 @@ function toCardData(
     rating: product.rating ? Number(product.rating) : null,
     reviewCount: product.reviewCount,
     badge: product.badge,
-    inStock: product.stock > 0,
     categorySlug: product.category.slug,
   };
 }
@@ -207,7 +206,7 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="font-accent text-lg italic text-accent-700">The details</p>
               <h2 className="mt-3 font-display text-4xl font-semibold text-primary-950">Know your ritual.</h2>
             </div>
-            <ProductDetails description={product.description} category={product.category.name} stock={product.stock} />
+            <ProductDetails description={product.description} category={product.category.name}/>
           </section>
         </Reveal>
 

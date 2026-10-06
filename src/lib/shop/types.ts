@@ -12,7 +12,6 @@ export interface ShopFilters {
   category?: string[];
   minPrice?: number;
   maxPrice?: number;
-  inStockOnly?: boolean;
 }
 
 export type ShopSearchParams = Record<string, string | undefined>;
@@ -35,7 +34,6 @@ export interface ProductCardData {
   rating?: number | null;
   reviewCount: number;
   badge?: "NEW" | "BESTSELLER" | null;
-  inStock: boolean;
   categorySlug?: string | null;
 }
 

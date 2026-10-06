@@ -50,7 +50,6 @@ export function parseShopSearchParams(
       category: splitParam(params.category),
       minPrice: minPrice > PRICE_BOUNDS.min ? minPrice : undefined,
       maxPrice: maxPrice < PRICE_BOUNDS.max ? maxPrice : undefined,
-      inStockOnly: params.inStock === "1",
     },
   };
 }

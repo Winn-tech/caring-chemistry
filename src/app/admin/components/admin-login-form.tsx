@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export function AdminLoginForm() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -41,7 +43,19 @@ export function AdminLoginForm() {
       </div>
       <div>
         <label className="text-sm font-medium text-primary-800" htmlFor="password">Password</label>
-        <input className="mt-2 w-full rounded-lg border border-primary-200 px-3.5 py-3 text-sm outline-none transition focus:border-accent-600 focus:ring-2 focus:ring-accent-100" id="password" name="password" type="password" autoComplete="current-password" required />
+        <div className="relative mt-2">
+          <input className="w-full rounded-lg border border-primary-200 py-3 pl-3.5 pr-11 text-sm outline-none transition focus:border-accent-600 focus:ring-2 focus:ring-accent-100" id="password" name="password" type={showPassword ? "text" : "password"} autoComplete="current-password" required />
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-pressed={showPassword}
+            aria-controls="password"
+            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-primary-500 outline-none transition-colors hover:text-primary-900 focus-visible:ring-2 focus-visible:ring-accent-100"
+          >
+            {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+          </button>
+        </div>
       </div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2.5 text-sm text-red-700" role="alert">{error}</p>}
       <button className="w-full rounded-lg bg-primary-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60" disabled={pending} type="submit">

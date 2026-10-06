@@ -24,7 +24,6 @@ function mapProductToCard(product: ProductWithCardRelations): ProductCardData {
     rating: product.rating ? Number(product.rating) : null,
     reviewCount: product.reviewCount ?? 0,
     badge: product.badge ? (product.badge === "BESTSELLER" ? "BESTSELLER" : "NEW") : null,
-    inStock: (product.stock ?? 0) > 0,
     categorySlug: product.category?.slug ?? null,
   };
 }
@@ -42,7 +41,6 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.8,
       reviewCount: 144,
       badge: "BESTSELLER",
-      inStock: true,
       categorySlug: "cleansers",
     },
     {
@@ -56,7 +54,6 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.9,
       reviewCount: 208,
       badge: "NEW",
-      inStock: true,
       categorySlug: "serums",
     },
     {
@@ -70,7 +67,6 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.7,
       reviewCount: 97,
       badge: "BESTSELLER",
-      inStock: true,
       categorySlug: "moisturizers",
     },
     {
@@ -83,7 +79,6 @@ function buildMockProducts(): ProductCardData[] {
       compareAtPrice: 8700,
       rating: 4.6,
       reviewCount: 71,
-      inStock: false,
       categorySlug: "body-care",
     },
     {
@@ -97,7 +92,6 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.8,
       reviewCount: 182,
       badge: "NEW",
-      inStock: true,
       categorySlug: "essentials",
     },
     {
@@ -110,7 +104,6 @@ function buildMockProducts(): ProductCardData[] {
       compareAtPrice: 11800,
       rating: 4.5,
       reviewCount: 68,
-      inStock: true,
       categorySlug: "essentials",
     },
   ];
@@ -150,10 +143,6 @@ function buildWhere(filters: ParsedShopQuery["filters"]): Prisma.ProductWhereInp
       ...(filters.minPrice !== undefined ? { gte: filters.minPrice } : {}),
       ...(filters.maxPrice !== undefined ? { lte: filters.maxPrice } : {}),
     };
-  }
-
-  if (filters.inStockOnly) {
-    where.stock = { gt: 0 };
   }
 
   return where;
@@ -201,9 +190,7 @@ export async function getProducts(query: ParsedShopQuery): Promise<ShopResult> {
         query.filters.minPrice === undefined || product.price >= query.filters.minPrice;
       const matchesMax =
         query.filters.maxPrice === undefined || product.price <= query.filters.maxPrice;
-      const matchesStock = !query.filters.inStockOnly || product.inStock;
-
-      return matchesCategory && matchesMin && matchesMax && matchesStock;
+      return matchesCategory && matchesMin && matchesMax;
     });
 
     const total = filteredProducts.length;

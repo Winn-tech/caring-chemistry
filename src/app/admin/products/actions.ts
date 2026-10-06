@@ -13,23 +13,18 @@ import { z } from "zod";
 export type ProductFormState = { error?: string };
 
 const optionalText = (max: number) => z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : undefined, z.string().max(max).optional());
-const optionalNumber = z.preprocess((value) => value === "" || value === null ? undefined : value, z.coerce.number().positive().max(99_999_999).optional());
+// Price, compare-at price and stock are not edited here: products are sold through retail
+// partners, who set their own prices and hold the stock. The columns stay in the database.
 const productSchema = z.object({
   name: z.string().trim().min(2).max(160),
   slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   description: optionalText(8_000),
-  price: z.coerce.number().positive().max(99_999_999),
-  compareAtPrice: optionalNumber,
-  stock: z.coerce.number().int().min(0).max(1_000_000),
   categoryId: z.string().cuid(),
   status: z.enum([ProductStatus.DRAFT, ProductStatus.ACTIVE]),
   badge: z.preprocess((value) => value === "" ? undefined : value, z.nativeEnum(ProductBadge).optional()),
   isBestSeller: z.boolean(),
   imageUrl: z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : undefined, z.string().url().max(2_000).optional()),
   imagePublicId: z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : undefined, z.string().max(500).optional()),
-}).refine((value) => value.compareAtPrice === undefined || value.compareAtPrice >= value.price, {
-  message: "Compare-at price must be at least the selling price.",
-  path: ["compareAtPrice"],
 });
 
 const retailerLinkSchema = z.object({
@@ -41,7 +36,6 @@ const retailerLinkSchema = z.object({
 function readProductForm(formData: FormData) {
   return productSchema.safeParse({
     name: formData.get("name"), slug: formData.get("slug"), description: formData.get("description"),
-    price: formData.get("price"), compareAtPrice: formData.get("compareAtPrice"), stock: formData.get("stock"),
     categoryId: formData.get("categoryId"), status: formData.get("status"), badge: formData.get("badge"), isBestSeller: formData.get("isBestSeller") === "on", imageUrl: formData.get("imageUrl"), imagePublicId: formData.get("imagePublicId"),
   });
 }
@@ -89,7 +83,8 @@ export async function createProduct(_: ProductFormState, formData: FormData): Pr
 
   try {
     const product = await prisma.$transaction(async (tx) => {
-      const created = await tx.product.create({ data: { ...productData, images: imageUrl ? { create: { url: imageUrl, publicId: imagePublicId, position: 0 } } : undefined } });
+      // The database still requires a price; 0 means "not set" (prices are not shown anywhere).
+      const created = await tx.product.create({ data: { ...productData, price: 0, images: imageUrl ? { create: { url: imageUrl, publicId: imagePublicId, position: 0 } } : undefined } });
       await saveRetailerLinks(tx, created.id, retailerLinks.links);
       return created;
     });
@@ -146,6 +141,7 @@ export async function updateProduct(_: ProductFormState, formData: FormData): Pr
   redirect("/admin/products");
 }
 
+/** Archives (soft-deletes) a product: hidden from the shop and the admin list, kept in the database. */
 export async function archiveProduct(formData: FormData) {
   const user = await requireAdminPage([Role.GENERAL_ADMIN, Role.SALES_TEAM]);
   const id = formData.get("id");

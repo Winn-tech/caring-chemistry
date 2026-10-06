@@ -107,6 +107,16 @@ export function Navbar() {
     setMobileOpen(false);
   }
 
+  // While the mobile menu is open, keep the page behind it still so swipes scroll the menu.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [mobileOpen]);
+
   const openMenu = (label: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setActiveLabel(label);
@@ -184,7 +194,9 @@ export function Navbar() {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-primary-100 bg-[#FAF7F3] px-6 pb-6 md:hidden">
+        // The header is sticky, so a menu taller than the screen could never be scrolled into view.
+        // Cap it at the viewport below the 5rem header bar (py-3 + h-14 logo) and let it scroll on its own.
+        <div className="max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t border-primary-100 bg-[#FAF7F3] px-6 pb-6 md:hidden">
           <nav className="flex flex-col gap-1 pt-4">
             {NAV_LINKS.map((link) => (
               <div key={link.href} className="flex flex-col gap-1">

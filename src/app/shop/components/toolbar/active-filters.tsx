@@ -44,14 +44,6 @@ export function ActiveFilters({ filters }: ActiveFiltersProps) {
     });
   }
 
-  if (filters.inStockOnly) {
-    chips.push({
-      key: "inStock",
-      label: "In Stock",
-      remove: () => ({ inStock: null }),
-    });
-  }
-
   if (chips.length === 0) return null;
 
   function clearAll() {

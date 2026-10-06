@@ -34,7 +34,6 @@ export const getCatalogForAssistant = cached(async () => {
       name: true,
       slug: true,
       description: true,
-      stock: true,
       isBestSeller: true,
       category: { select: { name: true } },
     },
@@ -47,9 +46,8 @@ export const getCatalogForAssistant = cached(async () => {
   return products
     .map((p) => {
       const description = summarize(p.description ?? "") || "No description provided.";
-      const availability = p.stock > 0 ? "in stock" : "OUT OF STOCK";
       const bestSeller = p.isBestSeller ? " | BEST SELLER" : "";
-      return `- ${p.name} | link: /product/${p.slug} | category: ${p.category.name} | ${availability}${bestSeller}\n  ${description}`;
+      return `- ${p.name} | link: /product/${p.slug} | category: ${p.category.name}${bestSeller}\n  ${description}`;
     })
     .join("\n");
 });

@@ -68,12 +68,6 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         {product.descriptor && (
           <p className="mt-1 line-clamp-2 text-base text-[#6d5568]">{product.descriptor}</p>
         )}
-
-        {!product.inStock && (
-          <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-[#8a7288]">
-            Sold out
-          </p>
-        )}
       </div>
     </article>
   );

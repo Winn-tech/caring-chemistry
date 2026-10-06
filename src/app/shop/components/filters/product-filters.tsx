@@ -43,22 +43,6 @@ export function ProductFilters({ filters }: ProductFiltersProps) {
           ))}
         </div>
       </div>
-
-      <label className="flex items-center gap-2 text-sm text-[#4d3d50]">
-        <input
-          type="checkbox"
-          checked={Boolean(filters.inStockOnly)}
-          onChange={() =>
-            router.push(
-              buildShopHref(searchParams, {
-                inStock: filters.inStockOnly ? null : "1",
-              })
-            )
-          }
-          className="h-4 w-4 accent-[#c88041]"
-        />
-        In stock only
-      </label>
     </div>
   );
 }

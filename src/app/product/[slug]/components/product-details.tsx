@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-export function ProductDetails({ description, category, stock }: { description: string | null; category: string; stock: number }) {
+export function ProductDetails({ description, category }: { description: string | null; category: string }) {
   const [open, setOpen] = useState<string | null>("description");
   const items = [
     { id: "description", title: "Product description", content: description || "A considered addition to your everyday beauty ritual." },
     { id: "delivery", title: "Delivery and returns", content: "Orders are prepared with care. Contact the team if your order arrives damaged or you need help with a return." },
-    { id: "care", title: "Care notes", content: stock > 0 ? "Available to order while stock lasts." : "This product is currently unavailable." },
+    // Stock is held by our retail partners, so availability is shown in "Where to buy" above.
+    { id: "availability", title: "Availability", content: "Buy online through our verified retail partners or in one of our stores. See “Where to buy” above for current options." },
   ];
 
   return (

@@ -16,8 +16,7 @@ interface ProductToolbarProps {
 function countActive(filters: ShopFilters) {
   return (
     (filters.category?.length ?? 0) +
-    (filters.minPrice !== undefined || filters.maxPrice !== undefined ? 1 : 0) +
-    (filters.inStockOnly ? 1 : 0)
+    (filters.minPrice !== undefined || filters.maxPrice !== undefined ? 1 : 0)
   );
 }
 
