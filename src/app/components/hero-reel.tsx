@@ -12,37 +12,37 @@ type ReelClip = { src: string; poster?: string; name: string; note: string; href
 const REEL: ReelClip[] = [
   {
     src: "/video/hero-1.mp4",
-    name: "Product One",
+    name: "Body Treat",
     note: "Serum · Niacinamide",
     href: "/shop",
   },
   {
     src: "/video/hero-2.mp4",
-    name: "Product Two",
+    name: "Maxi Tona Nourishment",
     note: "Moisturizer · Ceramides",
     href: "/shop",
   },
   {
     src: "/video/hero-3.mp4",
-    name: "Product Three",
+    name: "Maxi Tona Essentialn8",
     note: "Cleanser · Gentle daily",
     href: "/shop",
   },
   {
     src: "/video/hero-4.mp4",
-    name: "Novia Soap",
+    name: "Novia Fresh & Glow Exfoliating Soap",
     note: "Body care · Soap",
     href: "/shop?category=body-care",
   },
   {
     src: "/video/hero-5.mp4",
-    name: "Product Five",
+    name: "Novia Fresh & Glow Moisturising and Beauty Soap",
     note: "Body care · Soap",
     href: "/shop?category=body-care",
   },
   {
     src: "/video/hero-6.mp4",
-    name: "Product Five",
+    name: "Novia Fresh & Glow Cleansing Soap",
     note: "Body care · Soap",
     href: "/shop?category=body-care",
   },
