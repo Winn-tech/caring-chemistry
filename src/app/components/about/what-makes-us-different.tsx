@@ -105,7 +105,7 @@ export function WhatMakesUsDifferent() {
                 <h3 className="relative mt-7 font-display text-xl font-semibold text-primary-950">
                   {title}
                 </h3>
-                <p className="relative mt-3 text-sm leading-relaxed text-primary-500">
+                <p className="relative mt-3 text-sm leading-relaxed text-primary-500 lg:text-[17px]">
                   {description}
                 </p>
 

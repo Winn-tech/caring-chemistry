@@ -269,6 +269,7 @@ model BlogPost {
   slug        String     @unique
   excerpt     String?
   category    String     @default("Skincare")
+  concern     String?
   content     String
   coverUrl    String?
   status      PostStatus @default(DRAFT)

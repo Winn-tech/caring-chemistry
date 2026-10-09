@@ -12,7 +12,7 @@ import { JournalNewsletter } from "./components/journal-newsletter";
 import { RoutineBuilder } from "./components/routine-builder";
 import type { JournalArticle } from "./journal-data";
 
-export function JournalPageContent({ adminArticles }: { adminArticles: JournalArticle[] }) {
+export function JournalPageContent({ adminArticles, featuredArticle, spotlightArticle }: { adminArticles: JournalArticle[]; featuredArticle: JournalArticle | null; spotlightArticle: JournalArticle | null }) {
   const searchParams = useSearchParams();
   const query = searchParams.get("search") ?? "";
   const [category, setCategory] = useState(searchParams.get("category") ?? "All");
@@ -21,10 +21,10 @@ export function JournalPageContent({ adminArticles }: { adminArticles: JournalAr
     <>
       <JournalHero />
       <JournalCategories category={category} onCategoryChange={setCategory} />
-      <JournalFeatured />
+      {featuredArticle && <JournalFeatured article={featuredArticle} />}
       <JournalLatest query={query} category={category} concern={searchParams.get("concern") ?? ""} adminArticles={adminArticles} />
       <JournalConcerns />
-      <IngredientSpotlight />
+      {spotlightArticle && <IngredientSpotlight article={spotlightArticle} />}
       <RoutineBuilder />
       <JournalNewsletter />
     </>

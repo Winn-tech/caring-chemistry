@@ -22,7 +22,7 @@ export function OurPhilosophy() {
               <span className="font-display text-3xl font-bold text-primary-200">{principle.number}</span>
               <div>
                 <h3 className="font-display text-lg font-semibold text-primary-950">{principle.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-primary-500">{principle.description}</p>
+                <p className="mt-2 text-sm leading-relaxed text-primary-500 lg:text-[17px]">{principle.description}</p>
               </div>
             </Reveal>
           ))}

@@ -285,6 +285,7 @@ export const BlogPostScalarFieldEnum = {
   slug: 'slug',
   excerpt: 'excerpt',
   category: 'category',
+  concern: 'concern',
   content: 'content',
   coverUrl: 'coverUrl',
   status: 'status',

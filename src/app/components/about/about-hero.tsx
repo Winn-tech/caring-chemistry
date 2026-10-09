@@ -12,11 +12,12 @@ export function AboutHero() {
       imageAlt="A woman with glowing skin holding a jar of Body Treat"
       textSide="right"
       mobileFocus="left"
+      largeDesktopText
     >
       <div className="flex justify-center">
         <Link
           href="#our-story"
-          className="about-scroll-cue flex items-center gap-2 text-sm font-medium text-primary-500 transition-colors hover:text-accent-600"
+          className="about-scroll-cue flex items-center gap-2 text-sm font-medium text-primary-500 transition-colors hover:text-accent-600 lg:text-[17px]"
         >
           Our Story
           <ArrowDown size={15} />

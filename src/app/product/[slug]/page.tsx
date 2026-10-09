@@ -11,7 +11,7 @@ import { Footer } from "@/app/components/footer";
 import { Reveal } from "@/app/components/reveal";
 import { Breadcrumb } from "@/app/shop/components/breadcrumb";
 import { ProductCard } from "@/app/shop/components/product/product-card";
-import { JOURNAL_ARTICLES } from "@/app/journal/journal-data";
+import { getPublishedJournalArticles } from "@/app/journal/journal-posts";
 import { ProductGallery } from "./components/product-gallery";
 import { ProductDetails } from "./components/product-details";
 import { ProductWhereToBuy } from "./components/product-where-to-buy";
@@ -84,7 +84,8 @@ export default async function ProductPage({ params }: PageProps) {
     url: image.url,
     alt: image.alt ?? product.name,
   }));
-  const article = JOURNAL_ARTICLES.find((entry) => entry.concern === product.category.slug) ?? JOURNAL_ARTICLES[0];
+  const journalArticles = await getPublishedJournalArticles();
+  const article = journalArticles.find((entry) => entry.concern === product.category.slug) ?? journalArticles[0] ?? null;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -170,34 +171,6 @@ export default async function ProductPage({ params }: PageProps) {
         </Reveal>
 
         
-        {/* Why you'll love it */}
-        <Reveal delay={80}>
-          <section className="grid gap-12 py-24 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-            <div>
-              <p className="font-accent text-xl italic text-accent-700">Why you&apos;ll love it</p>
-              <h2 className="mt-3 max-w-lg font-display text-4xl font-semibold leading-tight text-primary-950 sm:text-5xl">
-                Beauty care with room to breathe.
-              </h2>
-              <p className="mt-6 max-w-md leading-7 text-[#6e5b69]">
-                The best product experience starts with clarity. See the details, understand the ritual, and choose
-                what belongs in yours.
-              </p>
-            </div>
-            <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-[#eee4df]">
-              {productImages[0] ? (
-                <Image
-                  src={productImages[0].url}
-                  alt=""
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  className="object-cover"
-                />
-              ) : (
-                <div className="h-full bg-[#ead9d2]" />
-              )}
-            </div>
-          </section>
-        </Reveal>
 
         {/* Details */}
         <Reveal>
@@ -243,7 +216,7 @@ export default async function ProductPage({ params }: PageProps) {
         )}
 
         {/* Journal CTA */}
-        <section className="grid gap-8 border-t border-[#e7dbd9] py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+        {article && <section className="grid gap-8 border-t border-[#e7dbd9] py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             <p className="font-accent text-xl italic text-accent-700">From the journal</p>
             <h2 className="mt-3 font-display text-4xl font-semibold text-primary-950">
@@ -268,7 +241,7 @@ export default async function ProductPage({ params }: PageProps) {
               <p className="mt-2 font-display text-2xl font-semibold">{article.title}</p>
             </div>
           </Link>
-        </section>
+        </section>}
       </div>
 
       <Footer />

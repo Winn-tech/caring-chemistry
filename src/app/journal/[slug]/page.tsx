@@ -6,17 +6,11 @@ import { AnnouncementBar } from "../../components/announcement-bar";
 import { Navbar } from "../../components/navbar";
 import { Reveal } from "../../components/reveal";
 import { NewsletterModal } from "../../components/newsletter-modal";
-import { JOURNAL_ARTICLES } from "../journal-data";
 import { getPublishedJournalArticle } from "../journal-posts";
-
-// Built-in articles are prerendered; posts published from the admin are rendered on request.
-export function generateStaticParams() {
-  return JOURNAL_ARTICLES.map((article) => ({ slug: article.slug }));
-}
 
 export default async function JournalArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = (await getPublishedJournalArticle(slug)) ?? JOURNAL_ARTICLES.find((item) => item.slug === slug);
+  const article = await getPublishedJournalArticle(slug);
 
   if (!article) notFound();
 

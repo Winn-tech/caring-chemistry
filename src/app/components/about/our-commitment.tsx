@@ -20,8 +20,8 @@ export function OurCommitment() {
           {COMMITMENTS.map(({ icon: Icon, title, description }, index) => (
             <Reveal key={title} delay={index * 100}>
               <Icon size={24} className="text-accent-600 transition-transform duration-500 hover:-translate-y-1 hover:rotate-6" />
-              <h3 className="mt-4 font-display text-base font-semibold text-primary-950">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-primary-500">{description}</p>
+              <h3 className="mt-4 font-display text-base font-semibold text-primary-950 lg:text-[17px]">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-primary-500 lg:text-[17px]">{description}</p>
             </Reveal>
           ))}
         </div>

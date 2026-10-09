@@ -10,13 +10,13 @@ export function AboutCta() {
           Ready to meet your skin?
         </h2>
 
-        <p className="mt-4 text-sm text-primary-300 sm:text-base">
+        <p className="mt-4 text-sm text-primary-300 sm:text-base lg:text-[17px]">
           Discover products created with intention, not guesswork.
         </p>
 
         <Link
           href="/shop"
-          className="mt-8 inline-block rounded-full bg-accent-500 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-600"
+          className="mt-8 inline-block rounded-full bg-accent-500 px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-600 lg:text-[17px]"
         >
           Shop the Collection
         </Link>

@@ -11,7 +11,11 @@ export default async function JournalPage() {
       <AnnouncementBar />
       <Navbar />
       <Suspense fallback={null}>
-        <JournalPageContent adminArticles={adminArticles} />
+        <JournalPageContent
+          adminArticles={adminArticles}
+          featuredArticle={adminArticles[0] ?? null}
+          spotlightArticle={adminArticles.find((article) => article.category === "Ingredients") ?? null}
+        />
       </Suspense>
     </main>
   );

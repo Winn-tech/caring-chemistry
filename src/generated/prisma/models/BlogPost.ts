@@ -30,6 +30,7 @@ export type BlogPostMinAggregateOutputType = {
   slug: string | null
   excerpt: string | null
   category: string | null
+  concern: string | null
   content: string | null
   coverUrl: string | null
   status: $Enums.PostStatus | null
@@ -45,6 +46,7 @@ export type BlogPostMaxAggregateOutputType = {
   slug: string | null
   excerpt: string | null
   category: string | null
+  concern: string | null
   content: string | null
   coverUrl: string | null
   status: $Enums.PostStatus | null
@@ -60,6 +62,7 @@ export type BlogPostCountAggregateOutputType = {
   slug: number
   excerpt: number
   category: number
+  concern: number
   content: number
   coverUrl: number
   status: number
@@ -77,6 +80,7 @@ export type BlogPostMinAggregateInputType = {
   slug?: true
   excerpt?: true
   category?: true
+  concern?: true
   content?: true
   coverUrl?: true
   status?: true
@@ -92,6 +96,7 @@ export type BlogPostMaxAggregateInputType = {
   slug?: true
   excerpt?: true
   category?: true
+  concern?: true
   content?: true
   coverUrl?: true
   status?: true
@@ -107,6 +112,7 @@ export type BlogPostCountAggregateInputType = {
   slug?: true
   excerpt?: true
   category?: true
+  concern?: true
   content?: true
   coverUrl?: true
   status?: true
@@ -195,6 +201,7 @@ export type BlogPostGroupByOutputType = {
   slug: string
   excerpt: string | null
   category: string
+  concern: string | null
   content: string
   coverUrl: string | null
   status: $Enums.PostStatus
@@ -231,6 +238,7 @@ export type BlogPostWhereInput = {
   slug?: Prisma.StringFilter<"BlogPost"> | string
   excerpt?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   category?: Prisma.StringFilter<"BlogPost"> | string
+  concern?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   content?: Prisma.StringFilter<"BlogPost"> | string
   coverUrl?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   status?: Prisma.EnumPostStatusFilter<"BlogPost"> | $Enums.PostStatus
@@ -247,6 +255,7 @@ export type BlogPostOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
+  concern?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -266,6 +275,7 @@ export type BlogPostWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"BlogPost"> | string
   excerpt?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   category?: Prisma.StringFilter<"BlogPost"> | string
+  concern?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   content?: Prisma.StringFilter<"BlogPost"> | string
   coverUrl?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   status?: Prisma.EnumPostStatusFilter<"BlogPost"> | $Enums.PostStatus
@@ -282,6 +292,7 @@ export type BlogPostOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
+  concern?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -303,6 +314,7 @@ export type BlogPostScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"BlogPost"> | string
   excerpt?: Prisma.StringNullableWithAggregatesFilter<"BlogPost"> | string | null
   category?: Prisma.StringWithAggregatesFilter<"BlogPost"> | string
+  concern?: Prisma.StringNullableWithAggregatesFilter<"BlogPost"> | string | null
   content?: Prisma.StringWithAggregatesFilter<"BlogPost"> | string
   coverUrl?: Prisma.StringNullableWithAggregatesFilter<"BlogPost"> | string | null
   status?: Prisma.EnumPostStatusWithAggregatesFilter<"BlogPost"> | $Enums.PostStatus
@@ -318,6 +330,7 @@ export type BlogPostCreateInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -333,6 +346,7 @@ export type BlogPostUncheckedCreateInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -348,6 +362,7 @@ export type BlogPostUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -363,6 +378,7 @@ export type BlogPostUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -378,6 +394,7 @@ export type BlogPostCreateManyInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -393,6 +410,7 @@ export type BlogPostUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -407,6 +425,7 @@ export type BlogPostUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -432,6 +451,7 @@ export type BlogPostCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  concern?: Prisma.SortOrder
   content?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -447,6 +467,7 @@ export type BlogPostMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  concern?: Prisma.SortOrder
   content?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -462,6 +483,7 @@ export type BlogPostMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  concern?: Prisma.SortOrder
   content?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -523,6 +545,7 @@ export type BlogPostCreateWithoutAuthorInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -537,6 +560,7 @@ export type BlogPostUncheckedCreateWithoutAuthorInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -580,6 +604,7 @@ export type BlogPostScalarWhereInput = {
   slug?: Prisma.StringFilter<"BlogPost"> | string
   excerpt?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   category?: Prisma.StringFilter<"BlogPost"> | string
+  concern?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   content?: Prisma.StringFilter<"BlogPost"> | string
   coverUrl?: Prisma.StringNullableFilter<"BlogPost"> | string | null
   status?: Prisma.EnumPostStatusFilter<"BlogPost"> | $Enums.PostStatus
@@ -595,6 +620,7 @@ export type BlogPostCreateManyAuthorInput = {
   slug: string
   excerpt?: string | null
   category?: string
+  concern?: string | null
   content: string
   coverUrl?: string | null
   status?: $Enums.PostStatus
@@ -609,6 +635,7 @@ export type BlogPostUpdateWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -623,6 +650,7 @@ export type BlogPostUncheckedUpdateWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -637,6 +665,7 @@ export type BlogPostUncheckedUpdateManyWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  concern?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
@@ -653,6 +682,7 @@ export type BlogPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   slug?: boolean
   excerpt?: boolean
   category?: boolean
+  concern?: boolean
   content?: boolean
   coverUrl?: boolean
   status?: boolean
@@ -669,6 +699,7 @@ export type BlogPostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   slug?: boolean
   excerpt?: boolean
   category?: boolean
+  concern?: boolean
   content?: boolean
   coverUrl?: boolean
   status?: boolean
@@ -685,6 +716,7 @@ export type BlogPostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   slug?: boolean
   excerpt?: boolean
   category?: boolean
+  concern?: boolean
   content?: boolean
   coverUrl?: boolean
   status?: boolean
@@ -701,6 +733,7 @@ export type BlogPostSelectScalar = {
   slug?: boolean
   excerpt?: boolean
   category?: boolean
+  concern?: boolean
   content?: boolean
   coverUrl?: boolean
   status?: boolean
@@ -710,7 +743,7 @@ export type BlogPostSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BlogPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "category" | "content" | "coverUrl" | "status" | "publishedAt" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["blogPost"]>
+export type BlogPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "excerpt" | "category" | "concern" | "content" | "coverUrl" | "status" | "publishedAt" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["blogPost"]>
 export type BlogPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -732,6 +765,7 @@ export type $BlogPostPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     slug: string
     excerpt: string | null
     category: string
+    concern: string | null
     content: string
     coverUrl: string | null
     status: $Enums.PostStatus
@@ -1168,6 +1202,7 @@ export interface BlogPostFieldRefs {
   readonly slug: Prisma.FieldRef<"BlogPost", 'String'>
   readonly excerpt: Prisma.FieldRef<"BlogPost", 'String'>
   readonly category: Prisma.FieldRef<"BlogPost", 'String'>
+  readonly concern: Prisma.FieldRef<"BlogPost", 'String'>
   readonly content: Prisma.FieldRef<"BlogPost", 'String'>
   readonly coverUrl: Prisma.FieldRef<"BlogPost", 'String'>
   readonly status: Prisma.FieldRef<"BlogPost", 'PostStatus'>

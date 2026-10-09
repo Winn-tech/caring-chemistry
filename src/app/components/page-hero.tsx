@@ -22,6 +22,8 @@ interface PageHeroProps {
    * Defaults to `textSide`; set it to the subject's side to keep the person in view instead.
    */
   mobileFocus?: "left" | "right";
+  /** Increase the breadcrumb text for pages with a larger desktop type scale. */
+  largeDesktopText?: boolean;
   /** Optional content under the banner, e.g. a scroll cue. */
   children?: ReactNode;
 }
@@ -31,13 +33,13 @@ interface PageHeroProps {
  * full-width image in its own 16:9 shape on larger screens, with dark text over the
  * image's plain side.
  */
-export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSide, mobileFocus = textSide, children }: PageHeroProps) {
+export function PageHero({ crumb, title, description, imageSrc, imageAlt, textSide, mobileFocus = textSide, largeDesktopText = false, children }: PageHeroProps) {
   const right = textSide === "right";
 
   return (
     <section className="bg-[#f8f4f1] pb-16 text-[#2e2032]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <nav aria-label="Breadcrumb" className="pt-5 text-xs">
+        <nav aria-label="Breadcrumb" className={`pt-5 text-xs ${largeDesktopText ? "lg:text-[17px]" : ""}`}>
           <ol className="flex items-center gap-1.5 text-[#6c5d6e]">
             <li className="flex items-center gap-1.5">
               <Link href="/" className="transition-colors hover:text-[#2e2032]">

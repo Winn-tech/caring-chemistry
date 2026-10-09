@@ -6,7 +6,7 @@ import { PostStatus, Role } from "@/generated/prisma/enums";
 import { requireAdminPage } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { auditServer } from "@/lib/security";
-import { BLOG_CATEGORIES } from "@/lib/blog";
+import { BLOG_CATEGORIES, BLOG_CONCERNS } from "@/lib/blog";
 import { z } from "zod";
 
 export type PostFormState = { error?: string };
@@ -16,11 +16,12 @@ const postSchema = z.object({
   slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   excerpt: optionalText(500),
   category: z.enum(BLOG_CATEGORIES),
+  concern: z.enum(BLOG_CONCERNS).nullable(),
   content: z.string().trim().min(20).max(100_000),
   coverUrl: z.preprocess((value) => typeof value === "string" && value.trim() ? value.trim() : undefined, z.string().url().max(2_000).optional()),
   status: z.enum([PostStatus.DRAFT, PostStatus.PUBLISHED]),
 });
-function parse(formData: FormData) { return postSchema.safeParse({ title: formData.get("title"), slug: formData.get("slug"), excerpt: formData.get("excerpt"), category: formData.get("category"), content: formData.get("content"), coverUrl: formData.get("coverUrl"), status: formData.get("status") }); }
+function parse(formData: FormData) { const concern = formData.get("concern"); return postSchema.safeParse({ title: formData.get("title"), slug: formData.get("slug"), excerpt: formData.get("excerpt"), category: formData.get("category"), concern: typeof concern === "string" && concern ? concern : null, content: formData.get("content"), coverUrl: formData.get("coverUrl"), status: formData.get("status") }); }
 function errorMessage(result: ReturnType<typeof parse>) { return result.success ? undefined : result.error.issues[0]?.message ?? "Please review the article."; }
 
 export async function createPost(_: PostFormState, formData: FormData): Promise<PostFormState> {

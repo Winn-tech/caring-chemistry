@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { JOURNAL_ARTICLES, type JournalArticle } from "../journal-data";
+import type { JournalArticle } from "../journal-data";
 import { Reveal } from "../../components/reveal";
 
 interface JournalLatestProps {
@@ -31,12 +31,12 @@ function ArticleCard({ article, index }: { article: JournalArticle; index: numbe
 
 export function JournalLatest({ query, category, concern, adminArticles }: JournalLatestProps) {
   const normalizedQuery = query.trim().toLowerCase();
-  const articles = [...adminArticles, ...JOURNAL_ARTICLES].filter((article) => {
+  const articles = adminArticles.filter((article) => {
     const matchesCategory = category === "All" || article.category === category;
     const matchesConcern = !concern || article.concern === concern;
     const matchesQuery = !normalizedQuery || `${article.title} ${article.excerpt} ${article.category}`.toLowerCase().includes(normalizedQuery);
     return matchesCategory && matchesConcern && matchesQuery;
-  });
+  }).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
 
   return (
     <section id="latest-stories" className="bg-[#f8f6f2] px-6 pb-20 lg:px-10 lg:pb-28">

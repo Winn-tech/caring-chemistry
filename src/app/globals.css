@@ -286,3 +286,48 @@
     animation: none;
   }
 }
+
+/* Keep readable text at 17px minimum on desktop while preserving larger type styles. */
+@media (min-width: 64rem) {
+  body {
+    font-size: 17px;
+  }
+
+  small,
+  sub,
+  sup,
+  .input {
+    font-size: 17px !important;
+  }
+
+  :is(
+    [class*="text-xs"],
+    [class*="text-sm"],
+    [class*="text-base"],
+    [class*="text-[10px]"],
+    [class*="text-[11px]"],
+    [class*="text-[13.5px]"],
+    [class*="text-[15px]"],
+    [class*="text-[16px]"]
+  ):not(
+    [class*="text-lg"],
+    [class*="text-xl"],
+    [class*="text-2xl"],
+    [class*="text-3xl"],
+    [class*="text-4xl"],
+    [class*="text-5xl"],
+    [class*="text-6xl"],
+    [class*="text-7xl"],
+    [class*="text-[17px]"],
+    [class*="text-[18px]"],
+    [class*="text-[19px]"],
+    [class*="text-[22px]"],
+    [class*="text-[25px]"],
+    [class*="text-[26px]"],
+    [class*="text-[1.12em]"],
+    [class*="text-[3.25rem]"],
+    [class*="text-[5.75rem]"]
+  ) {
+    font-size: 17px !important;
+  }
+}

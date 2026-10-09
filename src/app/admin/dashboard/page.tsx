@@ -25,9 +25,9 @@ export default async function AdminDashboardPage() {
     prisma.order.aggregate({ where: { paymentStatus: "PAID" }, _sum: { total: true } }),
   ]);
   const mainAdmin = user.role === Role.GENERAL_ADMIN;
-  const customers = mainAdmin ? await prisma.user.count({ where: { role: Role.CUSTOMER } }) : null;
+  const stores = mainAdmin ? await prisma.store.count() : null;
 
-  return <AdminShell user={user}><DashboardHeader user={user.name} /><section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Metric label="Paid revenue" value={naira.format(Number(paidRevenue._sum.total ?? 0))} detail="All completed payments" /><Metric label="Orders" value={String(orderCount)} detail="All recorded orders" /><Metric label="Products" value={String(products)} detail={`${activeProducts} currently active`} />{mainAdmin && <Metric label="Customers" value={String(customers)} detail="Registered customer accounts" />}</section><Focus title={mainAdmin ? "Store operations" : "Sales operations"} description={mainAdmin ? "You have full access to staff, catalogue, orders, content and operational settings." : "Manage the product catalogue and fulfilment workflow. Access is enforced again by the API for every action."} /></AdminShell>;
+  return <AdminShell user={user}><DashboardHeader user={user.name} /><section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Metric label="Paid revenue" value={naira.format(Number(paidRevenue._sum.total ?? 0))} detail="All completed payments" /><Metric label="Orders" value={String(orderCount)} detail="All recorded orders" /><Metric label="Products" value={String(products)} detail={`${activeProducts} currently active`} />{mainAdmin && <Metric label="Stores" value={String(stores)} detail="Registered store locations" />}</section><Focus title={mainAdmin ? "Store operations" : "Sales operations"} description={mainAdmin ? "You have full access to staff, catalogue, orders, content and operational settings." : "Manage the product catalogue and fulfilment workflow. Access is enforced again by the API for every action."} /></AdminShell>;
 }
 
 function DashboardHeader({ user }: { user: string }) {

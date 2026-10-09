@@ -2,12 +2,6 @@ import Link from "next/link";
 import { PostStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 
-const FALLBACK_ARTICLES = [
-  { title: "How to Layer Your Skincare", slug: "how-to-layer-skincare" },
-  { title: "Choosing the Right Serum", slug: "choosing-the-right-serum" },
-  { title: "Understanding SPF", slug: "understanding-spf" },
-];
-
 export async function JournalSection() {
   const posts = await prisma.blogPost.findMany({
     where: { status: PostStatus.PUBLISHED },
@@ -16,13 +10,13 @@ export async function JournalSection() {
     take: 3,
   });
 
-  const articles = posts.length > 0 ? posts : FALLBACK_ARTICLES;
+  if (posts.length === 0) return null;
 
   return (
     <section className="border-t border-[#e7dfe5] py-12">
       <h2 className="font-accent text-xl text-[#2e2032]">Learn more about your skin</h2>
       <ul className="mt-5 grid gap-4 sm:grid-cols-3">
-        {articles.map((article) => (
+        {posts.map((article) => (
           <li key={article.slug}>
             <Link
               href={`/journal/${article.slug}`}

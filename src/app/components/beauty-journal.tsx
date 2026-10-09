@@ -15,30 +15,6 @@ interface JournalPost {
   coverUrl: string | null;
 }
 
-const FALLBACK_POSTS: JournalPost[] = [
-  {
-    id: "routine",
-    slug: "build-a-routine-that-actually-works",
-    title: "Build a routine that actually works",
-    excerpt: "A thoughtful, step-by-step approach to skin that feels as good as it looks.",
-    coverUrl: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1400&q=85",
-  },
-  {
-    id: "ingredients",
-    slug: "five-ingredients-your-skin-will-love",
-    title: "Five ingredients your skin will love",
-    excerpt: "The quiet achievers worth knowing before you add another product to your shelf.",
-    coverUrl: "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: "morning-night",
-    slug: "morning-vs-night-your-routine-explained",
-    title: "Morning vs night: your routine, explained",
-    excerpt: "What your skin needs when the day begins and when it winds down.",
-    coverUrl: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=85",
-  },
-];
-
 const TOPICS = ["Acne", "Dry skin", "Hyperpigmentation", "Ingredients", "Routines"];
 
 function PostImage({ post, sizes }: { post: JournalPost; sizes: string }) {
@@ -59,7 +35,7 @@ function PostImage({ post, sizes }: { post: JournalPost; sizes: string }) {
 }
 
 export function BeautyJournal() {
-  const [posts, setPosts] = useState(FALLBACK_POSTS);
+  const [posts, setPosts] = useState<JournalPost[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -67,7 +43,7 @@ export function BeautyJournal() {
     fetch("/api/blog/posts")
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((payload: { data?: JournalPost[] }) => {
-        if (!cancelled && payload.data && payload.data.length > 0) {
+        if (!cancelled && payload.data) {
           setPosts(payload.data.slice(0, 3));
         }
       })
@@ -79,6 +55,8 @@ export function BeautyJournal() {
   }, []);
 
   const [featured, ...supporting] = posts;
+
+  if (!featured) return null;
 
   return (
     <section id="journal" className="overflow-hidden bg-[#f2ede8] py-24 sm:py-28">
