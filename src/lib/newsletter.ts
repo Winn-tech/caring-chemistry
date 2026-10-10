@@ -42,10 +42,23 @@ function config() {
 }
 
 /** Resend's batch endpoint accepts at most 100 emails per request. */
-const BATCH_SIZE = 100;
-/** Stays under Resend's default limit of 2 requests per second. */
-const BATCH_INTERVAL_MS = 600;
+export const NEWSLETTER_BATCH_SIZE = 100;
+/** Pause between batches; stays under Resend's default limit of 2 requests per second. */
+export const NEWSLETTER_BATCH_INTERVAL_MS = 600;
 const MAX_RATE_LIMIT_RETRIES = 3;
+/** Never wait longer than this for a brief rate limit; a daily/monthly quota is handled by pausing instead. */
+const MAX_RETRY_WAIT_MS = 30_000;
+
+/**
+ * The email provider refused to send more for now (daily or monthly quota, or rate limiting that
+ * did not clear). Campaigns pause on this and continue later instead of failing.
+ */
+export class NewsletterQuotaError extends Error {
+  constructor() {
+    super("The email provider's sending allowance has been reached. The campaign will continue when it frees up.");
+    this.name = "NewsletterQuotaError";
+  }
+}
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -63,9 +76,15 @@ async function postBatch(apiKey: string, emails: object[]) {
       cache: "no-store",
     });
     if (response.ok) return;
-    if (response.status === 429 && attempt < MAX_RATE_LIMIT_RETRIES) {
+    if (response.status === 429) {
+      // A daily or monthly quota will not clear by waiting: stop now so the campaign pauses.
+      const body = await response.json().catch(() => null);
+      const reason = `${body?.name ?? ""} ${body?.message ?? ""}`.toLowerCase();
+      if (reason.includes("quota") || attempt >= MAX_RATE_LIMIT_RETRIES) throw new NewsletterQuotaError();
       const retryAfter = Number(response.headers.get("retry-after"));
-      await wait(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 1000 * (attempt + 1));
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 1000 * (attempt + 1);
+      if (waitMs > MAX_RETRY_WAIT_MS) throw new NewsletterQuotaError();
+      await wait(waitMs);
       continue;
     }
     throw new Error("The newsletter email could not be sent.");
@@ -73,32 +92,26 @@ async function postBatch(apiKey: string, emails: object[]) {
 }
 
 /**
- * Sends one campaign to many recipients in batches of 100, each with its own unsubscribe link.
- * Returns how many emails Resend accepted; on failure the error carries no count, so callers
- * should track progress through `onBatchSent`.
+ * Sends one campaign email to up to 100 recipients in a single Resend batch request, each with
+ * its own unsubscribe link. Throws NewsletterQuotaError when the provider's allowance is used up.
  */
-export async function sendNewsletterBatches(input: { emails: string[]; subject: string; content: string; onBatchSent?: (sentSoFar: number) => void | Promise<void> }) {
+export async function sendNewsletterBatch(input: { emails: string[]; subject: string; content: string }) {
+  if (input.emails.length === 0) return;
+  if (input.emails.length > NEWSLETTER_BATCH_SIZE) throw new Error(`A batch holds at most ${NEWSLETTER_BATCH_SIZE} emails.`);
   const settings = config();
-  let sent = 0;
-  for (let index = 0; index < input.emails.length; index += BATCH_SIZE) {
-    if (index > 0) await wait(BATCH_INTERVAL_MS);
-    const batch = input.emails.slice(index, index + BATCH_SIZE).map((email) => {
-      const token = unsubscribeTokenForEmail(email);
-      return {
-        from: settings.from,
-        to: [email],
-        subject: input.subject,
-        html: renderNewsletterHtml(input.content, `${settings.appUrl}/newsletter/unsubscribe/${token}`),
-        // One-click unsubscribe (RFC 8058), expected by Gmail and Yahoo from bulk senders.
-        headers: {
-          "List-Unsubscribe": `<${settings.appUrl}/api/newsletter/unsubscribe/${token}>`,
-          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-        },
-      };
-    });
-    await postBatch(settings.apiKey, batch);
-    sent += batch.length;
-    await input.onBatchSent?.(sent);
-  }
-  return sent;
+  const batch = input.emails.map((email) => {
+    const token = unsubscribeTokenForEmail(email);
+    return {
+      from: settings.from,
+      to: [email],
+      subject: input.subject,
+      html: renderNewsletterHtml(input.content, `${settings.appUrl}/newsletter/unsubscribe/${token}`),
+      // One-click unsubscribe (RFC 8058), expected by Gmail and Yahoo from bulk senders.
+      headers: {
+        "List-Unsubscribe": `<${settings.appUrl}/api/newsletter/unsubscribe/${token}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    };
+  });
+  await postBatch(settings.apiKey, batch);
 }

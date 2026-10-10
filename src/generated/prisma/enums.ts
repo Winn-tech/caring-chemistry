@@ -72,6 +72,7 @@ export const NewsletterCampaignStatus = {
   DRAFT: 'DRAFT',
   QUEUED: 'QUEUED',
   SENDING: 'SENDING',
+  PAUSED: 'PAUSED',
   SENT: 'SENT',
   FAILED: 'FAILED'
 } as const

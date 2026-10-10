@@ -137,3 +137,9 @@ export type RateLimitEvent = Prisma.RateLimitEventModel
  * (not the link row) because product saves recreate their retailer links.
  */
 export type RetailerClick = Prisma.RetailerClickModel
+/**
+ * Model NewsletterDelivery
+ * One row per subscriber a campaign was sent to. Lets a campaign continue across days (within the
+ * email provider's daily allowance) without anyone receiving it twice.
+ */
+export type NewsletterDelivery = Prisma.NewsletterDeliveryModel

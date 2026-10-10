@@ -52,6 +52,7 @@ enum NewsletterCampaignStatus {
   DRAFT
   QUEUED
   SENDING
+  PAUSED
   SENT
   FAILED
 }
@@ -303,6 +304,7 @@ model NewsletterCampaign {
   sentAt         DateTime?
   createdById    String
   createdBy      User                     @relation("NewsletterCampaignAuthor", fields: [createdById], references: [id], onDelete: Restrict)
+  deliveries     NewsletterDelivery[]
   createdAt      DateTime                 @default(now())
   updatedAt      DateTime                 @updatedAt
 
@@ -363,4 +365,17 @@ model RetailerClick {
   @@index([createdAt])
   @@index([retailerId, createdAt])
   @@index([productId, createdAt])
+}
+
+/// One row per subscriber a campaign was sent to. Lets a campaign continue across days (within the
+/// email provider's daily allowance) without anyone receiving it twice.
+model NewsletterDelivery {
+  id         String             @id @default(cuid())
+  campaignId String
+  email      String
+  sentAt     DateTime           @default(now())
+  campaign   NewsletterCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, email])
+  @@index([sentAt])
 }

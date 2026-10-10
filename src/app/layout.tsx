@@ -26,11 +26,8 @@ const body = Inter({
 export const metadata: Metadata = {
   title: "Caring Chemistry | Thoughtful skincare",
   description: "High-performance skincare for unhurried rituals.",
-  icons: {
-    icon: "/logo/favicon.svg",
-    apple: "/logo/favicon.svg",
-    shortcut: "/logo/favicon.svg",
-  },
+  // Browser icons come from the file conventions in this folder: favicon.ico, icon.png and
+  // apple-icon.png, all generated from the round brand logo. Next.js adds the tags automatically.
 };
 
 export default function RootLayout({

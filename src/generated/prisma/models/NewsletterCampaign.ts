@@ -249,6 +249,7 @@ export type NewsletterCampaignWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"NewsletterCampaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NewsletterCampaign"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deliveries?: Prisma.NewsletterDeliveryListRelationFilter
 }
 
 export type NewsletterCampaignOrderByWithRelationInput = {
@@ -262,6 +263,7 @@ export type NewsletterCampaignOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
+  deliveries?: Prisma.NewsletterDeliveryOrderByRelationAggregateInput
 }
 
 export type NewsletterCampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -278,6 +280,7 @@ export type NewsletterCampaignWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"NewsletterCampaign"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NewsletterCampaign"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deliveries?: Prisma.NewsletterDeliveryListRelationFilter
 }, "id">
 
 export type NewsletterCampaignOrderByWithAggregationInput = {
@@ -322,6 +325,7 @@ export type NewsletterCampaignCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy: Prisma.UserCreateNestedOneWithoutNewsletterCampaignsInput
+  deliveries?: Prisma.NewsletterDeliveryCreateNestedManyWithoutCampaignInput
 }
 
 export type NewsletterCampaignUncheckedCreateInput = {
@@ -334,6 +338,7 @@ export type NewsletterCampaignUncheckedCreateInput = {
   createdById: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deliveries?: Prisma.NewsletterDeliveryUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type NewsletterCampaignUpdateInput = {
@@ -346,6 +351,7 @@ export type NewsletterCampaignUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneRequiredWithoutNewsletterCampaignsNestedInput
+  deliveries?: Prisma.NewsletterDeliveryUpdateManyWithoutCampaignNestedInput
 }
 
 export type NewsletterCampaignUncheckedUpdateInput = {
@@ -358,6 +364,7 @@ export type NewsletterCampaignUncheckedUpdateInput = {
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveries?: Prisma.NewsletterDeliveryUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type NewsletterCampaignCreateManyInput = {
@@ -449,6 +456,11 @@ export type NewsletterCampaignSumOrderByAggregateInput = {
   recipientCount?: Prisma.SortOrder
 }
 
+export type NewsletterCampaignScalarRelationFilter = {
+  is?: Prisma.NewsletterCampaignWhereInput
+  isNot?: Prisma.NewsletterCampaignWhereInput
+}
+
 export type NewsletterCampaignCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.NewsletterCampaignCreateWithoutCreatedByInput, Prisma.NewsletterCampaignUncheckedCreateWithoutCreatedByInput> | Prisma.NewsletterCampaignCreateWithoutCreatedByInput[] | Prisma.NewsletterCampaignUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.NewsletterCampaignCreateOrConnectWithoutCreatedByInput | Prisma.NewsletterCampaignCreateOrConnectWithoutCreatedByInput[]
@@ -495,6 +507,20 @@ export type EnumNewsletterCampaignStatusFieldUpdateOperationsInput = {
   set?: $Enums.NewsletterCampaignStatus
 }
 
+export type NewsletterCampaignCreateNestedOneWithoutDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.NewsletterCampaignCreateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.NewsletterCampaignCreateOrConnectWithoutDeliveriesInput
+  connect?: Prisma.NewsletterCampaignWhereUniqueInput
+}
+
+export type NewsletterCampaignUpdateOneRequiredWithoutDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.NewsletterCampaignCreateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.NewsletterCampaignCreateOrConnectWithoutDeliveriesInput
+  upsert?: Prisma.NewsletterCampaignUpsertWithoutDeliveriesInput
+  connect?: Prisma.NewsletterCampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NewsletterCampaignUpdateToOneWithWhereWithoutDeliveriesInput, Prisma.NewsletterCampaignUpdateWithoutDeliveriesInput>, Prisma.NewsletterCampaignUncheckedUpdateWithoutDeliveriesInput>
+}
+
 export type NewsletterCampaignCreateWithoutCreatedByInput = {
   id?: string
   subject: string
@@ -504,6 +530,7 @@ export type NewsletterCampaignCreateWithoutCreatedByInput = {
   sentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deliveries?: Prisma.NewsletterDeliveryCreateNestedManyWithoutCampaignInput
 }
 
 export type NewsletterCampaignUncheckedCreateWithoutCreatedByInput = {
@@ -515,6 +542,7 @@ export type NewsletterCampaignUncheckedCreateWithoutCreatedByInput = {
   sentAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deliveries?: Prisma.NewsletterDeliveryUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type NewsletterCampaignCreateOrConnectWithoutCreatedByInput = {
@@ -558,6 +586,70 @@ export type NewsletterCampaignScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"NewsletterCampaign"> | Date | string
 }
 
+export type NewsletterCampaignCreateWithoutDeliveriesInput = {
+  id?: string
+  subject: string
+  content: string
+  status?: $Enums.NewsletterCampaignStatus
+  recipientCount?: number
+  sentAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy: Prisma.UserCreateNestedOneWithoutNewsletterCampaignsInput
+}
+
+export type NewsletterCampaignUncheckedCreateWithoutDeliveriesInput = {
+  id?: string
+  subject: string
+  content: string
+  status?: $Enums.NewsletterCampaignStatus
+  recipientCount?: number
+  sentAt?: Date | string | null
+  createdById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type NewsletterCampaignCreateOrConnectWithoutDeliveriesInput = {
+  where: Prisma.NewsletterCampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.NewsletterCampaignCreateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedCreateWithoutDeliveriesInput>
+}
+
+export type NewsletterCampaignUpsertWithoutDeliveriesInput = {
+  update: Prisma.XOR<Prisma.NewsletterCampaignUpdateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedUpdateWithoutDeliveriesInput>
+  create: Prisma.XOR<Prisma.NewsletterCampaignCreateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedCreateWithoutDeliveriesInput>
+  where?: Prisma.NewsletterCampaignWhereInput
+}
+
+export type NewsletterCampaignUpdateToOneWithWhereWithoutDeliveriesInput = {
+  where?: Prisma.NewsletterCampaignWhereInput
+  data: Prisma.XOR<Prisma.NewsletterCampaignUpdateWithoutDeliveriesInput, Prisma.NewsletterCampaignUncheckedUpdateWithoutDeliveriesInput>
+}
+
+export type NewsletterCampaignUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumNewsletterCampaignStatusFieldUpdateOperationsInput | $Enums.NewsletterCampaignStatus
+  recipientCount?: Prisma.IntFieldUpdateOperationsInput | number
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutNewsletterCampaignsNestedInput
+}
+
+export type NewsletterCampaignUncheckedUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumNewsletterCampaignStatusFieldUpdateOperationsInput | $Enums.NewsletterCampaignStatus
+  recipientCount?: Prisma.IntFieldUpdateOperationsInput | number
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type NewsletterCampaignCreateManyCreatedByInput = {
   id?: string
   subject: string
@@ -578,6 +670,7 @@ export type NewsletterCampaignUpdateWithoutCreatedByInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveries?: Prisma.NewsletterDeliveryUpdateManyWithoutCampaignNestedInput
 }
 
 export type NewsletterCampaignUncheckedUpdateWithoutCreatedByInput = {
@@ -589,6 +682,7 @@ export type NewsletterCampaignUncheckedUpdateWithoutCreatedByInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveries?: Prisma.NewsletterDeliveryUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type NewsletterCampaignUncheckedUpdateManyWithoutCreatedByInput = {
@@ -603,6 +697,35 @@ export type NewsletterCampaignUncheckedUpdateManyWithoutCreatedByInput = {
 }
 
 
+/**
+ * Count Type NewsletterCampaignCountOutputType
+ */
+
+export type NewsletterCampaignCountOutputType = {
+  deliveries: number
+}
+
+export type NewsletterCampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  deliveries?: boolean | NewsletterCampaignCountOutputTypeCountDeliveriesArgs
+}
+
+/**
+ * NewsletterCampaignCountOutputType without action
+ */
+export type NewsletterCampaignCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NewsletterCampaignCountOutputType
+   */
+  select?: Prisma.NewsletterCampaignCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * NewsletterCampaignCountOutputType without action
+ */
+export type NewsletterCampaignCountOutputTypeCountDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NewsletterDeliveryWhereInput
+}
+
 
 export type NewsletterCampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -615,6 +738,8 @@ export type NewsletterCampaignSelect<ExtArgs extends runtime.Types.Extensions.In
   createdAt?: boolean
   updatedAt?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deliveries?: boolean | Prisma.NewsletterCampaign$deliveriesArgs<ExtArgs>
+  _count?: boolean | Prisma.NewsletterCampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["newsletterCampaign"]>
 
 export type NewsletterCampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -658,6 +783,8 @@ export type NewsletterCampaignSelectScalar = {
 export type NewsletterCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "subject" | "content" | "status" | "recipientCount" | "sentAt" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["newsletterCampaign"]>
 export type NewsletterCampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deliveries?: boolean | Prisma.NewsletterCampaign$deliveriesArgs<ExtArgs>
+  _count?: boolean | Prisma.NewsletterCampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type NewsletterCampaignIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -670,6 +797,7 @@ export type $NewsletterCampaignPayload<ExtArgs extends runtime.Types.Extensions.
   name: "NewsletterCampaign"
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs>
+    deliveries: Prisma.$NewsletterDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1076,6 +1204,7 @@ readonly fields: NewsletterCampaignFieldRefs;
 export interface Prisma__NewsletterCampaignClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  deliveries<T extends Prisma.NewsletterCampaign$deliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NewsletterCampaign$deliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NewsletterDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1512,6 +1641,30 @@ export type NewsletterCampaignDeleteManyArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many NewsletterCampaigns to delete.
    */
   limit?: number
+}
+
+/**
+ * NewsletterCampaign.deliveries
+ */
+export type NewsletterCampaign$deliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NewsletterDelivery
+   */
+  select?: Prisma.NewsletterDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NewsletterDelivery
+   */
+  omit?: Prisma.NewsletterDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NewsletterDeliveryInclude<ExtArgs> | null
+  where?: Prisma.NewsletterDeliveryWhereInput
+  orderBy?: Prisma.NewsletterDeliveryOrderByWithRelationInput | Prisma.NewsletterDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.NewsletterDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NewsletterDeliveryScalarFieldEnum | Prisma.NewsletterDeliveryScalarFieldEnum[]
 }
 
 /**

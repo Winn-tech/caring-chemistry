@@ -69,7 +69,8 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   AnnouncementBar: 'AnnouncementBar',
   RateLimitEvent: 'RateLimitEvent',
-  RetailerClick: 'RetailerClick'
+  RetailerClick: 'RetailerClick',
+  NewsletterDelivery: 'NewsletterDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -373,6 +374,16 @@ export const RetailerClickScalarFieldEnum = {
 } as const
 
 export type RetailerClickScalarFieldEnum = (typeof RetailerClickScalarFieldEnum)[keyof typeof RetailerClickScalarFieldEnum]
+
+
+export const NewsletterDeliveryScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  email: 'email',
+  sentAt: 'sentAt'
+} as const
+
+export type NewsletterDeliveryScalarFieldEnum = (typeof NewsletterDeliveryScalarFieldEnum)[keyof typeof NewsletterDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {

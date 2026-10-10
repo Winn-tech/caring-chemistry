@@ -9,14 +9,14 @@ import { useCountUp } from "@/app/hooks/use-count-up";
 
 const VALUES = [
   {
-    icon: "fluent-emoji:alembic",
+    icon: "fluent-emoji:microscope",
     tone: "rose",
     title: "Dermatologist Formulated",
     description:
       "Every product is developed with board-certified dermatologists and clinically tested before launch.",
   },
   {
-    icon: "fluent-emoji:herb",
+    icon: "fluent-emoji:gem-stone",
     tone: "gold",
     title: "Quality You Can Trust",
     description:
