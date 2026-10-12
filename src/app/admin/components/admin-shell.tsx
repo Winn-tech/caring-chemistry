@@ -26,7 +26,7 @@ const items: Array<{ href: string; label: string; icon: LucideIcon; roles: reado
   { href: "/admin/announcement", label: "Announcement", icon: Megaphone, roles: ["GENERAL_ADMIN", "SOCIAL_TEAM"] },
   { href: "/admin/newsletter", label: "Newsletter", icon: Mail, roles: ["GENERAL_ADMIN"] },
   { href: "/admin/staff", label: "Admin users", icon: Users, roles: ["GENERAL_ADMIN"] },
-  { href: "/admin/settings", label: "Settings", icon: Settings, roles: ["GENERAL_ADMIN"] },
+  { href: "/admin/settings", label: "Settings", icon: Settings, roles: ["GENERAL_ADMIN", "SALES_TEAM", "SOCIAL_TEAM"] },
 ];
 
 export function AdminShell({ user, children }: AdminShellProps) {
@@ -42,18 +42,21 @@ export function AdminShell({ user, children }: AdminShellProps) {
 
   return (
     <main className="min-h-screen bg-[#f7f3ef] text-primary-950 lg:grid lg:h-screen lg:grid-cols-[16rem_1fr] lg:overflow-hidden">
-      <aside className="admin-sidebar border-b border-primary-100 bg-white px-5 py-5 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r lg:px-6 lg:py-7">
-        <div className="flex items-center justify-between lg:block">
+      {/* Desktop: the sidebar is screen-height; the title and account block stay put and the menu
+          between them scrolls when it doesn't fit (short screens, zoomed in). Phones: the menu is a
+          horizontal strip that scrolls sideways. */}
+      <aside className="admin-sidebar border-b border-primary-100 bg-white px-5 py-5 lg:flex lg:h-screen lg:flex-col lg:overflow-hidden lg:border-b-0 lg:border-r lg:px-6 lg:py-7">
+        <div className="flex items-center justify-between lg:block lg:shrink-0">
           <Link className="font-display text-xl font-semibold tracking-tight" href="/admin/dashboard">Caring Chemistry</Link>
           <span className="rounded-full bg-accent-100 px-3 py-1 text-xs font-semibold text-accent-800 lg:hidden">Admin</span>
         </div>
-        <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:mt-10 lg:flex-col" aria-label="Admin navigation">
+        <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:-mx-2 lg:mt-10 lg:min-h-0 lg:flex-1 lg:flex-col lg:overflow-x-hidden lg:overflow-y-auto lg:overscroll-contain lg:px-2" aria-label="Admin navigation">
           {links.map(({ href, label, icon: Icon }, index) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return <Link key={href} href={href} className={`admin-nav-item inline-flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${active ? "bg-primary-950 text-white" : "text-primary-700 hover:bg-primary-50"}`} style={{ "--admin-nav-delay": `${index * 55}ms` } as React.CSSProperties}><Icon size={17} />{label}</Link>;
           })}
         </nav>
-        <div className="mt-5 hidden border-t border-primary-100 pt-5 lg:block">
+        <div className="mt-5 hidden border-t border-primary-100 pt-5 lg:block lg:shrink-0">
           <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-primary-800"><ShieldCheck size={18} /></span><div className="min-w-0"><p className="truncate text-sm font-semibold">{user.name}</p><p className="truncate text-xs text-primary-500">{roleLabel[user.role]}</p></div></div>
           <button className="mt-5 text-sm font-medium text-primary-600 hover:text-primary-950" onClick={signOut} type="button">Sign out</button>
         </div>
