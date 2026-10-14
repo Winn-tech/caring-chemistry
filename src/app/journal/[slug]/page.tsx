@@ -19,10 +19,10 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
       <AnnouncementBar />
       <Navbar />
       <article className="bg-[#f8f6f2]">
-        <Reveal className="mx-auto max-w-4xl px-6 pb-12 pt-20 text-center lg:px-10 lg:pt-28">
+        <Reveal className="mx-auto max-w-4xl px-6 pb-12 pt-20 sm:pt-10 text-center lg:px-10 lg:pt-5">
           <Link href="/journal" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700 hover:text-accent-700"><ArrowLeft size={16} /> Back to journal</Link>
           <p className="mt-12 text-xs font-semibold uppercase tracking-[0.22em] text-accent-700">{article.category}</p>
-          <h1 className="mt-5 font-display text-5xl font-semibold leading-[0.96] text-primary-950 sm:text-7xl">{article.title}</h1>
+          <h3 className="mt-5 font-display text-4xl font-semibold leading-[0.96] text-primary-950 sm:text-7xl">{article.title}</h3>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-primary-600">{article.excerpt}</p>
           <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-primary-400">{article.readTime} · {article.date}</p>
         </Reveal>

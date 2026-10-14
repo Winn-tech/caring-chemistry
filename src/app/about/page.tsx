@@ -6,6 +6,7 @@ import { OurPhilosophy } from "../components/about/our-philosophy";
 import { WhatMakesUsDifferent } from "../components/about/what-makes-us-different";
 import { IngredientPhilosophy } from "../components/about/ingredient-philosophy";
 import { OurCommitment } from "../components/about/our-commitment";
+import { ContactSection } from "../components/about/contact-section";
 import { AboutCta } from "../components/about/about-cta";
 
 export default function AboutPage() {
@@ -18,6 +19,7 @@ export default function AboutPage() {
       <WhatMakesUsDifferent />
       <IngredientPhilosophy />
       <OurCommitment />
+      <ContactSection />
       <AboutCta/>
       <Footer />
     </main>

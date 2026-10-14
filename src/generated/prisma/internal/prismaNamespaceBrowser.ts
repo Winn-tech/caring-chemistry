@@ -70,7 +70,8 @@ export const ModelName = {
   AnnouncementBar: 'AnnouncementBar',
   RateLimitEvent: 'RateLimitEvent',
   RetailerClick: 'RetailerClick',
-  NewsletterDelivery: 'NewsletterDelivery'
+  NewsletterDelivery: 'NewsletterDelivery',
+  ContactMessage: 'ContactMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -384,6 +385,20 @@ export const NewsletterDeliveryScalarFieldEnum = {
 } as const
 
 export type NewsletterDeliveryScalarFieldEnum = (typeof NewsletterDeliveryScalarFieldEnum)[keyof typeof NewsletterDeliveryScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  topic: 'topic',
+  message: 'message',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SortOrder = {

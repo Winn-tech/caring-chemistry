@@ -379,3 +379,18 @@ model NewsletterDelivery {
   @@unique([campaignId, email])
   @@index([sentAt])
 }
+
+/// A message sent through the contact form on the About page. Read in the admin under Messages.
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  topic     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead, createdAt])
+  @@index([createdAt])
+}

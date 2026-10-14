@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Boxes, ClipboardList, FileText, LayoutDashboard, Mail, MapPin, Megaphone, Settings, ShieldCheck, ShoppingBag, Users, type LucideIcon } from "lucide-react";
+import { BookOpen, Boxes, ClipboardList, FileText, Inbox, LayoutDashboard, Mail, MapPin, Megaphone, Settings, ShieldCheck, ShoppingBag, Users, type LucideIcon } from "lucide-react";
 import { Role } from "@/generated/prisma/enums";
 
 type AdminShellProps = { user: { name: string; email: string; role: Role }; children: React.ReactNode };
@@ -22,6 +22,7 @@ const items: Array<{ href: string; label: string; icon: LucideIcon; roles: reado
   { href: "/admin/stores", label: "Stores", icon: MapPin, roles: ["GENERAL_ADMIN", "SALES_TEAM"] },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList, roles: ["GENERAL_ADMIN", "SALES_TEAM"] },
   { href: "/admin/invoices", label: "Invoices", icon: FileText, roles: ["GENERAL_ADMIN", "SALES_TEAM"] },
+  { href: "/admin/messages", label: "Messages", icon: Inbox, roles: ["GENERAL_ADMIN", "SALES_TEAM"] },
   { href: "/admin/journal", label: "Journal", icon: BookOpen, roles: ["GENERAL_ADMIN", "SOCIAL_TEAM"] },
   { href: "/admin/announcement", label: "Announcement", icon: Megaphone, roles: ["GENERAL_ADMIN", "SOCIAL_TEAM"] },
   { href: "/admin/newsletter", label: "Newsletter", icon: Mail, roles: ["GENERAL_ADMIN"] },

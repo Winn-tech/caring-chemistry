@@ -1,4 +1,5 @@
 import { createHash, createHmac } from "node:crypto";
+import { COMPANY_ADDRESS_LINE } from "@/lib/company";
 import { prisma } from "@/lib/prisma";
 
 export function createUnsubscribeToken(email: string) {
@@ -64,7 +65,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function renderNewsletterHtml(content: string, unsubscribeUrl: string) {
   const paragraphs = content.split(/\r?\n+/).filter(Boolean).map((paragraph) => `<p>${htmlEscape(paragraph)}</p>`).join("");
-  return `<div style="font-family:Arial,sans-serif;line-height:1.7;color:#35182b;max-width:640px">${paragraphs}<hr style="border:0;border-top:1px solid #eadce4;margin:32px 0"><p style="font-size:12px;color:#765d6d">You are receiving this email because you subscribed to Caring Chemistry. <a href="${unsubscribeUrl}">Unsubscribe</a></p></div>`;
+  return `<div style="font-family:Arial,sans-serif;line-height:1.7;color:#35182b;max-width:640px">${paragraphs}<hr style="border:0;border-top:1px solid #eadce4;margin:32px 0"><p style="font-size:12px;color:#765d6d">You are receiving this email because you subscribed to Caring Chemistry. <a href="${unsubscribeUrl}">Unsubscribe</a></p><p style="font-size:12px;color:#765d6d">Caring Chemistry, ${htmlEscape(COMPANY_ADDRESS_LINE)}</p></div>`;
 }
 
 async function postBatch(apiKey: string, emails: object[]) {

@@ -119,3 +119,8 @@ export type RetailerClick = Prisma.RetailerClickModel
  * email provider's daily allowance) without anyone receiving it twice.
  */
 export type NewsletterDelivery = Prisma.NewsletterDeliveryModel
+/**
+ * Model ContactMessage
+ * A message sent through the contact form on the About page. Read in the admin under Messages.
+ */
+export type ContactMessage = Prisma.ContactMessageModel

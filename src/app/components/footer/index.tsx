@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MapPin } from "lucide-react";
+import { COMPANY_ADDRESS, COMPANY_MAP_URL } from "@/lib/company";
 import { NewsletterForm } from "./newsletter-form";
 import { BackToTop } from "./back-to-top";
 import { FooterItem, FooterStagger, FooterWordmark } from "./footer-motion";
@@ -102,6 +103,20 @@ export function Footer() {
               <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">
                 High-performance skincare for unhurried rituals. Thoughtfully considered, simply explained.
               </p>
+              <address className="mt-5 not-italic">
+                <a
+                  href={COMPANY_MAP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex max-w-xs items-start gap-2.5 text-sm leading-relaxed text-white/60 transition-colors hover:text-white"
+                >
+                  <MapPin size={16} className="mt-0.5 shrink-0 text-accent-300" aria-hidden="true" />
+                  <span>
+                    {COMPANY_ADDRESS.street},<br />
+                    {COMPANY_ADDRESS.city}, {COMPANY_ADDRESS.region}, {COMPANY_ADDRESS.country}
+                  </span>
+                </a>
+              </address>
               <div className="mt-7 flex items-center gap-3">
                 {SOCIALS.map(({ icon: Icon, href, label }) => (
                   <a
