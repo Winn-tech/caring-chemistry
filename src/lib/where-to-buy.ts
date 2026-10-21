@@ -54,3 +54,15 @@ export async function getActiveStores(filters?: { country?: string; state?: stri
     orderBy: [{ country: "asc" }, { state: "asc" }, { city: "asc" }, { name: "asc" }],
   });
 }
+
+/** Active online retailers with a safe website link, in the admin's priority order. */
+export async function getOnlineRetailers() {
+  const retailers = await prisma.retailer.findMany({
+    where: { isActive: true, websiteUrl: { not: null } },
+    orderBy: [{ priority: "asc" }, { name: "asc" }],
+    select: { id: true, name: true, websiteUrl: true },
+  });
+  return retailers.flatMap((retailer) =>
+    isSafeExternalUrl(retailer.websiteUrl) ? [{ id: retailer.id, name: retailer.name, websiteUrl: retailer.websiteUrl!.trim() }] : [],
+  );
+}

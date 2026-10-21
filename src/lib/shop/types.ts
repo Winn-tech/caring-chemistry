@@ -49,3 +49,8 @@ export interface ShopCategory {
   slug: string;
   label: string;
 }
+
+export interface CategoryTile extends ShopCategory {
+  productCount: number;
+  imageUrl: string | null;
+}

@@ -21,7 +21,7 @@ export function ShopHeader({ title, count, imageUrl }: ShopHeaderProps) {
 
   if (imageUrl) {
     return (
-      <header className="relative w-full h-102 rounded-2xl overflow-hidden mb-8">
+      <header className="relative w-full h-110 rounded-2xl overflow-hidden mb-8">
         <Image
           src={imageUrl}
           alt={title}

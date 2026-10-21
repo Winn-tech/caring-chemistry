@@ -1,7 +1,7 @@
 import { Prisma, ProductStatus } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PAGE_SIZE } from "./constants";
-import type { ParsedShopQuery, ProductCardData, ShopCategory, ShopResult, SortKey } from "./types";
+import type { CategoryTile, ParsedShopQuery, ProductCardData, ShopCategory, ShopResult, SortKey } from "./types";
 
 type ProductWithCardRelations = Prisma.ProductGetPayload<{ include: { category: true; images: true } }>;
 
@@ -255,5 +255,64 @@ export async function getShopCategories(): Promise<ShopCategory[]> {
       { slug: "body-care", label: "Body Care" },
       { slug: "essentials", label: "Essentials" },
     ];
+  }
+}
+
+/** The newest active products, for the homepage's New Arrivals carousel. */
+export async function getNewArrivals(limit = 8): Promise<ProductCardData[]> {
+  try {
+    const rows = await prisma.product.findMany({
+      where: { status: ProductStatus.ACTIVE, deletedAt: null },
+      orderBy: buildOrderBy("newest"),
+      take: limit,
+      include: { category: true, images: { orderBy: { position: "asc" } } },
+    });
+    return rows.map(mapProductToCard);
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
+    return buildMockProducts().slice(0, limit);
+  }
+}
+
+/**
+ * The `limit` shop categories with the most products, each with a product count and a cover
+ * photo taken from its newest product that has one.
+ */
+export async function getCategoryTiles(limit = 4): Promise<CategoryTile[]> {
+  const tiles = await loadCategoryTiles();
+  return tiles.sort((a, b) => b.productCount - a.productCount).slice(0, limit);
+}
+
+async function loadCategoryTiles(): Promise<CategoryTile[]> {
+  const activeProduct = { status: ProductStatus.ACTIVE, deletedAt: null };
+  try {
+    const rows = await prisma.category.findMany({
+      where: { products: { some: activeProduct } },
+      orderBy: { name: "asc" },
+      select: {
+        slug: true,
+        name: true,
+        _count: { select: { products: { where: activeProduct } } },
+        products: {
+          where: { ...activeProduct, images: { some: {} } },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: { images: { orderBy: { position: "asc" }, take: 1, select: { url: true } } },
+        },
+      },
+    });
+    return rows.map((category) => ({
+      slug: category.slug,
+      label: category.name,
+      productCount: category._count.products,
+      imageUrl: category.products[0]?.images[0]?.url ?? null,
+    }));
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
+    const products = buildMockProducts();
+    return (await getShopCategories()).map((category) => {
+      const inCategory = products.filter((product) => product.categorySlug === category.slug);
+      return { ...category, productCount: inCategory.length, imageUrl: inCategory[0]?.imageUrl ?? null };
+    });
   }
 }
