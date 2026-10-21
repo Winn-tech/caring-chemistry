@@ -2,14 +2,14 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildShopHref } from "@/lib/shop/query";
-import { CATEGORY_FILTERS } from "@/lib/shop/constants";
-import type { ShopFilters } from "@/lib/shop/types";
+import type { ShopCategory, ShopFilters } from "@/lib/shop/types";
 
 interface ProductFiltersProps {
   filters: ShopFilters;
+  categories: ShopCategory[];
 }
 
-export function ProductFilters({ filters }: ProductFiltersProps) {
+export function ProductFilters({ filters, categories }: ProductFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,7 +30,7 @@ export function ProductFilters({ filters }: ProductFiltersProps) {
       <div>
         <p className="mb-3 text-sm font-medium text-[#2e2032]">Category</p>
         <div className="space-y-2">
-          {CATEGORY_FILTERS.map((category) => (
+          {categories.map((category) => (
             <label key={category.slug} className="flex cursor-pointer items-center gap-2 text-sm text-[#4d3d50]">
               <input
                 type="checkbox"

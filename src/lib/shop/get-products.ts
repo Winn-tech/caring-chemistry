@@ -1,7 +1,7 @@
 import { Prisma, ProductStatus } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PAGE_SIZE } from "./constants";
-import type { ParsedShopQuery, ProductCardData, ShopResult, SortKey } from "./types";
+import type { ParsedShopQuery, ProductCardData, ShopCategory, ShopResult, SortKey } from "./types";
 
 type ProductWithCardRelations = Prisma.ProductGetPayload<{ include: { category: true; images: true } }>;
 
@@ -234,5 +234,26 @@ export async function getCatalogSize(): Promise<number> {
   } catch (error) {
     if (!USE_MOCK_FALLBACK) throw error;
     return buildMockProducts().length;
+  }
+}
+
+/** Categories managed in the admin that have at least one active product, for the shop's tabs and filters. */
+export async function getShopCategories(): Promise<ShopCategory[]> {
+  try {
+    const rows = await prisma.category.findMany({
+      where: { products: { some: { status: ProductStatus.ACTIVE, deletedAt: null } } },
+      orderBy: { name: "asc" },
+      select: { slug: true, name: true },
+    });
+    return rows.map((category) => ({ slug: category.slug, label: category.name }));
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
+    return [
+      { slug: "cleansers", label: "Cleansers" },
+      { slug: "serums", label: "Serums" },
+      { slug: "moisturizers", label: "Moisturizers" },
+      { slug: "body-care", label: "Body Care" },
+      { slug: "essentials", label: "Essentials" },
+    ];
   }
 }

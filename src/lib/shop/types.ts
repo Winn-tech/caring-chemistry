@@ -44,3 +44,8 @@ export interface ShopResult {
   pageSize: number;
   totalPages: number;
 }
+
+export interface ShopCategory {
+  slug: string;
+  label: string;
+}

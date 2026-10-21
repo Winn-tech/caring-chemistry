@@ -1,15 +1,16 @@
 import Link from "next/link";
-import { CATEGORY_NAV } from "@/lib/shop/constants";
+import type { ShopCategory } from "@/lib/shop/types";
 
 interface CategoryNavProps {
+  categories: ShopCategory[];
   activeSlug: string;
 }
 
-export function CategoryNav({ activeSlug }: CategoryNavProps) {
+export function CategoryNav({ categories, activeSlug }: CategoryNavProps) {
   return (
     <nav aria-label="Shop categories" className="border-b border-[#e7dfe5] pb-1">
       <ul className="flex gap-6 overflow-x-auto no-scrollbar scroll-px-4">
-        {CATEGORY_NAV.map((category) => {
+        {[{ slug: "all", label: "All" }, ...categories].map((category) => {
           const isActive = category.slug === activeSlug;
           const href = category.slug === "all" ? "/shop" : `/shop?category=${category.slug}`;
           return (

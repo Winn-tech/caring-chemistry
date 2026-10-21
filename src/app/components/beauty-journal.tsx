@@ -70,7 +70,6 @@ export function BeautyJournal() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Leaf size={16} strokeWidth={1.5} />
               </motion.span>
               <span className="text-xs font-semibold uppercase tracking-[0.22em]">The Beauty Journal</span>
             </div>

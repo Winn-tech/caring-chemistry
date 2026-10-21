@@ -15,8 +15,7 @@ import { AiChatCta } from "./components/ai-chat-cta";
 import { JournalSection } from "./components/journal-section";
 import { NewsletterCta } from "./components/newsletter-cta";
 import { parseShopSearchParams } from "@/lib/shop/query";
-import { getProducts } from "@/lib/shop/get-products";
-import { CATEGORY_NAV } from "@/lib/shop/constants";
+import { getProducts, getShopCategories } from "@/lib/shop/get-products";
 
 export const metadata: Metadata = {
   title: "Shop Skincare & Beauty Essentials | Caring Chemistry",
@@ -31,11 +30,11 @@ interface ShopPageProps {
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const rawParams = await searchParams;
   const query = parseShopSearchParams(rawParams);
-  const result = await getProducts(query);
+  const [result, categories] = await Promise.all([getProducts(query), getShopCategories()]);
 
   const activeCategory = query.filters.category?.[0] ?? "all";
   const categoryLabel =
-    CATEGORY_NAV.find((c) => c.slug === activeCategory)?.label ?? "Shop All";
+    categories.find((c) => c.slug === activeCategory)?.label ?? "Shop All";
 
   return (
     <main>
@@ -51,13 +50,13 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             imageUrl="/images/Estee_Maxitone.png"
           />
 
-          <CategoryNav activeSlug={activeCategory} />
+          <CategoryNav categories={categories} activeSlug={activeCategory} />
 
-          <ProductToolbar total={result.total} sort={query.sort} filters={query.filters} />
+          <ProductToolbar total={result.total} sort={query.sort} filters={query.filters} categories={categories} />
 
           <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-10 lg:items-start">
             <aside className="hidden lg:block lg:sticky lg:top-24">
-              <ProductFilters filters={query.filters} />
+              <ProductFilters filters={query.filters} categories={categories} />
             </aside>
 
             <section aria-label="Products" className="min-h-[40vh]">

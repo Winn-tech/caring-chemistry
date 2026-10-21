@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { buildShopHref } from "@/lib/shop/query";
-import { categoryLabel, formatNaira } from "@/lib/shop/constants";
-import type { ShopFilters } from "@/lib/shop/types";
+import { formatNaira } from "@/lib/shop/constants";
+import type { ShopCategory, ShopFilters } from "@/lib/shop/types";
 
 interface Chip {
   key: string;
@@ -15,9 +15,10 @@ interface Chip {
 
 interface ActiveFiltersProps {
   filters: ShopFilters;
+  categories: ShopCategory[];
 }
 
-export function ActiveFilters({ filters }: ActiveFiltersProps) {
+export function ActiveFilters({ filters, categories }: ActiveFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -26,7 +27,7 @@ export function ActiveFilters({ filters }: ActiveFiltersProps) {
   filters.category?.forEach((slug) => {
     chips.push({
       key: `category:${slug}`,
-      label: categoryLabel(slug),
+      label: categories.find((category) => category.slug === slug)?.label ?? slug,
       remove: () => {
         const remaining = (filters.category ?? []).filter((value) => value !== slug);
         return { category: remaining.length ? remaining.join(",") : null };

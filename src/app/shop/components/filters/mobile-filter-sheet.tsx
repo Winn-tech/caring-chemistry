@@ -4,16 +4,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildShopHref } from "@/lib/shop/query";
-import { CATEGORY_FILTERS } from "@/lib/shop/constants";
-import type { ShopFilters } from "@/lib/shop/types";
+import type { ShopCategory, ShopFilters } from "@/lib/shop/types";
 
 interface MobileFilterSheetProps {
   filters: ShopFilters;
+  categories: ShopCategory[];
   open: boolean;
   onClose: () => void;
 }
 
-export function MobileFilterSheet({ filters, open, onClose }: MobileFilterSheetProps) {
+export function MobileFilterSheet({ filters, categories, open, onClose }: MobileFilterSheetProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -59,7 +59,7 @@ export function MobileFilterSheet({ filters, open, onClose }: MobileFilterSheetP
               <div>
                 <p className="mb-3 text-sm font-medium text-[#2e2032]">Category</p>
                 <div className="flex flex-wrap gap-2">
-                  {CATEGORY_FILTERS.map((category) => {
+                  {categories.map((category) => {
                     const selected = (filters.category ?? []).includes(category.slug);
                     return (
                       <button

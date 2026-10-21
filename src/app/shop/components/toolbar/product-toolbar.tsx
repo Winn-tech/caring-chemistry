@@ -5,12 +5,13 @@ import { SlidersHorizontal } from "lucide-react";
 import { SortSelect } from "./sort-select";
 import { ActiveFilters } from "./active-filters";
 import { MobileFilterSheet } from "../filters/mobile-filter-sheet";
-import type { ShopFilters, SortKey } from "@/lib/shop/types";
+import type { ShopCategory, ShopFilters, SortKey } from "@/lib/shop/types";
 
 interface ProductToolbarProps {
   total: number;
   sort: SortKey;
   filters: ShopFilters;
+  categories: ShopCategory[];
 }
 
 function countActive(filters: ShopFilters) {
@@ -20,7 +21,7 @@ function countActive(filters: ShopFilters) {
   );
 }
 
-export function ProductToolbar({ total, sort, filters }: ProductToolbarProps) {
+export function ProductToolbar({ total, sort, filters, categories }: ProductToolbarProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const activeCount = countActive(filters);
 
@@ -48,10 +49,11 @@ export function ProductToolbar({ total, sort, filters }: ProductToolbarProps) {
         <SortSelect value={sort} />
       </div>
 
-      <ActiveFilters filters={filters} />
+      <ActiveFilters filters={filters} categories={categories} />
 
       <MobileFilterSheet
         filters={filters}
+        categories={categories}
         open={sheetOpen}
         onClose={() => setSheetOpen(false)}
       />
