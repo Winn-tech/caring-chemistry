@@ -1,8 +1,8 @@
 // app/components/footer/index.tsx
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
-import { COMPANY_ADDRESS, COMPANY_MAP_URL } from "@/lib/company";
+import { ArrowUpRight, MapPin, Phone } from "lucide-react";
+import { COMPANY_ADDRESS, COMPANY_MAP_URL, COMPANY_PHONES } from "@/lib/company";
 import { NewsletterForm } from "./newsletter-form";
 import { BackToTop } from "./back-to-top";
 import { FooterItem, FooterStagger, FooterWordmark } from "./footer-motion";
@@ -116,6 +116,20 @@ export function Footer() {
                     {COMPANY_ADDRESS.city}, {COMPANY_ADDRESS.region}, {COMPANY_ADDRESS.country}
                   </span>
                 </a>
+                <div className="mt-3 flex items-start gap-2.5 text-sm leading-relaxed text-white/60">
+                  <Phone size={16} className="mt-0.5 shrink-0 text-accent-300" aria-hidden="true" />
+                  <ul>
+                    {COMPANY_PHONES.map((phone) => (
+                      <li key={phone.international}>
+                        <a href={phone.telUrl} className="transition-colors hover:text-white">{phone.display}</a>
+                        <span aria-hidden="true"> · </span>
+                        <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+                          WhatsApp<span className="sr-only"> {phone.display} (opens in a new tab)</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </address>
               <div className="mt-7 flex items-center gap-3">
                 {SOCIALS.map(({ icon: Icon, href, label }) => (

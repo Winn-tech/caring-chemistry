@@ -1,23 +1,7 @@
 import type { Metadata } from "next";
-import {
-  Bricolage_Grotesque,
-  Instrument_Serif,
-  Inter,
-} from "next/font/google";
-import { COMPANY_ADDRESS, COMPANY_SOCIAL_URLS } from "@/lib/company";
+import { Inter } from "next/font/google";
+import { COMPANY_ADDRESS, COMPANY_PHONES, COMPANY_SOCIAL_URLS } from "@/lib/company";
 import "./globals.css";
-
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-display",
-});
-
-const accentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-  variable: "--font-accent",
-});
 
 const body = Inter({
   subsets: ["latin"],
@@ -31,11 +15,12 @@ export const metadata: Metadata = {
   // apple-icon.png, all generated from the round brand logo. Next.js adds the tags automatically.
 };
 
-// Lets search engines show the company's address and social profiles.
+// Lets search engines show the company's address, phone numbers and social profiles.
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Caring Chemistry",
+  telephone: COMPANY_PHONES.map((phone) => phone.international),
   address: {
     "@type": "PostalAddress",
     streetAddress: COMPANY_ADDRESS.street,
@@ -52,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${accentSerif.variable} ${body.variable}`}
+      className={body.variable}
     >
       <body className="font-body">
         <script

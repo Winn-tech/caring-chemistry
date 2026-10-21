@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { MotionConfig } from "framer-motion";
-import { ArrowUpRight, MapPin, MessageCircle, Store } from "lucide-react";
-import { COMPANY_ADDRESS, COMPANY_MAP_EMBED_URL, COMPANY_MAP_URL } from "@/lib/company";
+import { ArrowUpRight, MapPin, MessageCircle, Phone, Store } from "lucide-react";
+import { COMPANY_ADDRESS, COMPANY_MAP_EMBED_URL, COMPANY_MAP_URL, COMPANY_PHONES } from "@/lib/company";
 import { Reveal } from "../reveal";
 import { ContactForm } from "./contact-form";
 
@@ -68,6 +68,36 @@ export function ContactSection() {
                   </span>
                 </span>
               </a>
+            </Reveal>
+
+            <Reveal once delay={120}>
+              <div className="flex items-start gap-4 rounded-2xl border border-primary-100 bg-[#F7F3EF] p-5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-accent-600">
+                  <Phone size={18} aria-hidden="true" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-primary-500">WhatsApp or call</span>
+                  <ul className="mt-1.5 space-y-2">
+                    {COMPANY_PHONES.map((phone) => (
+                      <li key={phone.international} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <a href={phone.telUrl} className="text-sm font-medium text-primary-950 transition-colors hover:text-accent-700 sm:text-base">
+                          {phone.display}
+                        </a>
+                        <a
+                          href={phone.whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-accent-700 transition-colors hover:text-accent-800"
+                        >
+                          <MessageCircle size={15} aria-hidden="true" />
+                          WhatsApp
+                          <span className="sr-only">{phone.display} (opens in a new tab)</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </span>
+              </div>
             </Reveal>
 
             <Reveal once delay={160}>

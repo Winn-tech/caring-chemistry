@@ -8,6 +8,18 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
+   {
+    label: "About",
+    href: "/about",
+    eyebrow: "Who we are",
+    description: "Our story, philosophy, ingredients, and the standards behind every formula.",
+    feature: "Learn what informs everything we make",
+    children: [
+      { label: "Our Story", href: "/about#our-story", description: "The beginning" },
+      { label: "Our Philosophy", href: "/about#our-philosophy", description: "What we believe" },
+      { label: "What Makes Us Different", href: "/about#what-makes-us-different", description: "Why we do things differently" },
+    ],
+  },
   {
     label: "Shop",
     href: "/shop",
@@ -62,18 +74,7 @@ const NAV_LINKS = [
       { label: "Product Match", href: "/chat", description: "Find the right fit" },
     ],
   },
-  {
-    label: "About",
-    href: "/about",
-    eyebrow: "Who we are",
-    description: "Our story, philosophy, ingredients, and the standards behind every formula.",
-    feature: "Learn what informs everything we make",
-    children: [
-      { label: "Our Story", href: "/about#our-story", description: "The beginning" },
-      { label: "Our Philosophy", href: "/about#our-philosophy", description: "What we believe" },
-      { label: "What Makes Us Different", href: "/about#what-makes-us-different", description: "Why we do things differently" },
-    ],
-  },
+ 
 ] as const;
 
 type NavLink = (typeof NAV_LINKS)[number];

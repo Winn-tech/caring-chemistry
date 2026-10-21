@@ -27,8 +27,8 @@
   --color-accent-950: #432711;
 }
 @theme {
-  --font-display: var(--font-display);
-  --font-accent: var(--font-accent);
+  --font-display: var(--font-body);
+  --font-accent: var(--font-body);
   --font-body: var(--font-body);
 }
 

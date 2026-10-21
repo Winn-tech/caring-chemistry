@@ -18,3 +18,12 @@ export const COMPANY_SOCIAL_URLS = [
   "https://www.facebook.com/Caringchemistryltd",
   "https://www.instagram.com/caringchemistryltd",
 ];
+
+/** Company phone numbers; both take WhatsApp messages and calls. Shown in the footer, the contact section and search-engine data. */
+export const COMPANY_PHONES = ["+2349169823862", "+2349169971916"].map((international) => ({
+  international,
+  /** Local Nigerian format, e.g. 0916 982 3862. */
+  display: `0${international.slice(4, 7)} ${international.slice(7, 10)} ${international.slice(10)}`,
+  telUrl: `tel:${international}`,
+  whatsappUrl: `https://wa.me/${international.slice(1)}`,
+}));
