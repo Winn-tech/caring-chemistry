@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -88,8 +89,16 @@ export function NewsletterModal({ trigger = "homepage" }: { trigger?: "homepage"
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
           >
             <div className="relative hidden min-h-105 overflow-hidden bg-primary-900 sm:block">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=900&q=85')] bg-cover bg-center" />
-              <div className="absolute inset-0 bg-primary-950/35" />
+              {/* The photo is landscape and this panel is portrait: keep the right-hand side, where the face and bottle are. */}
+              <Image
+                src="/images/Estee_maxitone.png"
+                alt=""
+                fill
+                sizes="320px"
+                className="object-cover object-[84%_center]"
+              />
+              {/* Darker only at the bottom, so the caption is readable without dimming the face. */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-950/80 via-primary-950/25 to-transparent" />
               <div className="relative flex h-full flex-col justify-end p-8 text-white">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-200">The considered edit</span>
                 <p className="mt-3 max-w-55 font-display text-3xl font-semibold leading-tight">Good skin care, made quieter.</p>

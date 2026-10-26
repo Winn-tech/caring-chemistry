@@ -19,9 +19,17 @@ export const COMPANY_SOCIAL_URLS = [
   "https://www.instagram.com/caringchemistryltd",
 ];
 
-/** Company phone numbers; both take WhatsApp messages and calls. Shown in the footer, the contact section and search-engine data. */
-export const COMPANY_PHONES = ["+2349169823862", "+2349169971916"].map((international) => ({
+/**
+ * Company phone numbers. Shown in the footer, the contact section and the homepage's Where to Buy.
+ * Numbers that take calls are also in search-engine data; WhatsApp-only numbers link to WhatsApp alone.
+ */
+export const COMPANY_PHONES = [
+  { international: "+2349169823862", whatsappOnly: false },
+  { international: "+2349169971916", whatsappOnly: false },
+  { international: "+2349097652164", whatsappOnly: true },
+].map(({ international, whatsappOnly }) => ({
   international,
+  whatsappOnly,
   /** Local Nigerian format, e.g. 0916 982 3862. */
   display: `0${international.slice(4, 7)} ${international.slice(7, 10)} ${international.slice(10)}`,
   telUrl: `tel:${international}`,

@@ -80,6 +80,15 @@ export function ContactSection() {
                   <ul className="mt-1.5 space-y-2">
                     {COMPANY_PHONES.map((phone) => (
                       <li key={phone.international} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        {phone.whatsappOnly ? (
+                          <span className="text-sm text-primary-600 sm:text-base">
+                            WhatsApp only:{" "}
+                            <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-primary-950 transition-colors hover:text-accent-700">
+                              {phone.display}
+                              <span className="sr-only"> (opens WhatsApp in a new tab)</span>
+                            </a>
+                          </span>
+                        ) : (<>
                         <a href={phone.telUrl} className="text-sm font-medium text-primary-950 transition-colors hover:text-accent-700 sm:text-base">
                           {phone.display}
                         </a>
@@ -93,6 +102,7 @@ export function ContactSection() {
                           WhatsApp
                           <span className="sr-only">{phone.display} (opens in a new tab)</span>
                         </a>
+                        </>)}
                       </li>
                     ))}
                   </ul>

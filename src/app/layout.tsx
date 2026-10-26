@@ -20,7 +20,7 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Caring Chemistry",
-  telephone: COMPANY_PHONES.map((phone) => phone.international),
+  telephone: COMPANY_PHONES.filter((phone) => !phone.whatsappOnly).map((phone) => phone.international),
   address: {
     "@type": "PostalAddress",
     streetAddress: COMPANY_ADDRESS.street,

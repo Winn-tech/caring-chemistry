@@ -121,11 +121,22 @@ export function Footer() {
                   <ul>
                     {COMPANY_PHONES.map((phone) => (
                       <li key={phone.international}>
-                        <a href={phone.telUrl} className="transition-colors hover:text-white">{phone.display}</a>
-                        <span aria-hidden="true"> · </span>
-                        <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-                          WhatsApp<span className="sr-only"> {phone.display} (opens in a new tab)</span>
-                        </a>
+                        {phone.whatsappOnly ? (
+                          <>
+                            WhatsApp only:{" "}
+                            <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+                              {phone.display}<span className="sr-only"> (opens WhatsApp in a new tab)</span>
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <a href={phone.telUrl} className="transition-colors hover:text-white">{phone.display}</a>
+                            <span aria-hidden="true"> · </span>
+                            <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+                              WhatsApp<span className="sr-only"> {phone.display} (opens in a new tab)</span>
+                            </a>
+                          </>
+                        )}
                       </li>
                     ))}
                   </ul>

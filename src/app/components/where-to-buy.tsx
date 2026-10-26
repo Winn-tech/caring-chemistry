@@ -76,17 +76,29 @@ export function WhereToBuy({ retailers, storeCount }: WhereToBuyProps) {
               <ul className="mt-4 space-y-2">
                 {COMPANY_PHONES.map((phone) => (
                   <li key={phone.international} className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <a href={phone.telUrl} className="text-sm font-medium text-primary-950 transition-colors hover:text-accent-700 sm:text-base">
-                      {phone.display}
-                    </a>
-                    <a
-                      href={phone.whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-accent-700 transition-colors hover:text-accent-800"
-                    >
-                      WhatsApp<span className="sr-only"> {phone.display} (opens in a new tab)</span>
-                    </a>
+                    {phone.whatsappOnly ? (
+                      <span className="text-sm text-primary-600 sm:text-base">
+                        WhatsApp only:{" "}
+                        <a href={phone.whatsappUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-primary-950 transition-colors hover:text-accent-700">
+                          {phone.display}
+                          <span className="sr-only"> (opens WhatsApp in a new tab)</span>
+                        </a>
+                      </span>
+                    ) : (
+                      <>
+                        <a href={phone.telUrl} className="text-sm font-medium text-primary-950 transition-colors hover:text-accent-700 sm:text-base">
+                          {phone.display}
+                        </a>
+                        <a
+                          href={phone.whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold text-accent-700 transition-colors hover:text-accent-800"
+                        >
+                          WhatsApp<span className="sr-only"> {phone.display} (opens in a new tab)</span>
+                        </a>
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>
