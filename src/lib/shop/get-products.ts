@@ -316,3 +316,19 @@ async function loadCategoryTiles(): Promise<CategoryTile[]> {
     });
   }
 }
+
+/** Products the admin has marked as best sellers, newest first, for the homepage's Best Sellers section. */
+export async function getBestSellers(limit = 5): Promise<ProductCardData[]> {
+  try {
+    const rows = await prisma.product.findMany({
+      where: { status: ProductStatus.ACTIVE, deletedAt: null, isBestSeller: true },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      include: { category: true, images: { orderBy: { position: "asc" } } },
+    });
+    return rows.map(mapProductToCard);
+  } catch (error) {
+    if (!USE_MOCK_FALLBACK) throw error;
+    return buildMockProducts().slice(0, limit);
+  }
+}

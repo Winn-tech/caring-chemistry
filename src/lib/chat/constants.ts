@@ -24,5 +24,5 @@ export const SUGGESTED_PROMPTS: SuggestedPrompt[] = [
 ];
 
 /** Only the most recent messages are sent to the model, which keeps each request cheap. */
-export const MAX_HISTORY_MESSAGES = 20;
+export const MAX_HISTORY_MESSAGES = 10;
 export const MAX_MESSAGE_CHARS = 2000;

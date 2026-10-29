@@ -11,15 +11,18 @@ import { BeautyJournal } from "./components/beauty-journal";
 import { WhereToBuy } from "./components/where-to-buy";
 import { Footer } from "./components/footer";
 import { NewsletterModal } from "./components/newsletter-modal";
-import { getCategoryTiles, getNewArrivals } from "@/lib/shop/get-products";
+import { getBestSellers, getCatalogSize, getCategoryTiles, getNewArrivals, getShopCategories } from "@/lib/shop/get-products";
 import { getActiveStores, getOnlineRetailers } from "@/lib/where-to-buy";
 
 // Catalogue sections are rebuilt at most every 5 minutes, so admin changes show up without a redeploy.
 export const revalidate = 300;
 
 export default async function Home() {
-  const [categories, newArrivals, retailers, stores] = await Promise.all([
+  const [bestSellers, categories, allCategories, catalogSize, newArrivals, retailers, stores] = await Promise.all([
+    getBestSellers(),
     getCategoryTiles(),
+    getShopCategories(),
+    getCatalogSize(),
     getNewArrivals(),
     getOnlineRetailers(),
     getActiveStores(),
@@ -30,11 +33,11 @@ export default async function Home() {
       <AnnouncementBar />
       <Navbar />
       <Hero />
-      <BestSellers/>
+      <BestSellers products={bestSellers} />
       <ShopByCategory categories={categories} />
       <BeautyJournal />
       <NewArrivals products={newArrivals} />
-      <BrandValues/>
+      <BrandValues productCount={catalogSize} categoryCount={allCategories.length} storeCount={stores.length} />
       <WhereToBuy retailers={retailers} storeCount={stores.length} />
       <NewsletterModal />
       <Footer/>

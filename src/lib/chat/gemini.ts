@@ -37,7 +37,14 @@ export async function* streamAssistantReply(systemPrompt: string, turns: ChatTur
     throw error;
   }
 
+  let usage;
   for await (const chunk of stream) {
+    usage = chunk.usageMetadata ?? usage;
     if (chunk.text) yield chunk.text;
+  }
+  // Shows in the function logs: what each reply cost, and how much of the prompt Gemini's
+  // automatic caching served at the discounted rate.
+  if (usage) {
+    console.info("Chat tokens", { prompt: usage.promptTokenCount, cached: usage.cachedContentTokenCount ?? 0, reply: usage.candidatesTokenCount, thinking: usage.thoughtsTokenCount ?? 0 });
   }
 }

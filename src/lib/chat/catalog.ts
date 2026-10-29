@@ -6,8 +6,10 @@ import { prisma } from "@/lib/prisma";
 // both lists are small; past a few hundred entries, switch to a search tool.
 const MAX_PRODUCTS = 150;
 const MAX_ARTICLES = 100;
-const MAX_SUMMARY_CHARS = 400;
-const CACHE_TTL_MS = 5 * 60 * 1000;
+// The catalogue is resent with every message, so each summary is kept to the opening of the
+// description: enough to match a concern, without paying for the full text each time.
+const MAX_SUMMARY_CHARS = 240;
+const CACHE_TTL_MS = 15 * 60 * 1000;
 
 function cached(load: () => Promise<string>) {
   let entry: { text: string; expiresAt: number } | null = null;
