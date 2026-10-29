@@ -14,8 +14,8 @@ const LINK_GROUPS = [
       { label: "Shop all", href: "/shop" },
       { label: "Best sellers", href: "/shop?sort=best-selling" },
       { label: "New arrivals", href: "/shop?sort=newest" },
-      { label: "Cleansers", href: "/shop?category=cleansers" },
-      { label: "Serums", href: "/shop?category=serums" },
+      { label: "Body cream", href: "/shop?category=body-cream" },
+      { label: "Soaps", href: "/shop?category=soaps" },
     ],
   },
   {

@@ -5,19 +5,22 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Droplets, FlaskConical, MoonStar, SunMedium } from "lucide-react";
 
+// `shop` links each step to a real shop category; steps without a matching category have no link.
+type Step = { title: string; icon: typeof Droplets; shop?: { slug: string; label: string }; description: string; note: string };
+
 const basics = [
-  { title: "Cleanse", icon: Droplets, category: "cleansers", morning: "A fresh start. Gently cleanse without leaving your skin feeling tight.", evening: "Wash away the day. Gently remove sunscreen, makeup and daily buildup.", note: "Keep the water lukewarm" },
-  { title: "Treat", icon: FlaskConical, category: "serums", morning: "An optional moment of targeted care. Choose a serum that suits your needs.", evening: "Use your chosen treatment as directed. You don’t need to layer every active.", note: "Optional, never obligatory" },
-  { title: "Moisturize", icon: Droplets, category: "moisturizers", morning: "Help seal in hydration with a comfortable layer of moisturizer.", evening: "Finish with moisture. Choose a texture that leaves your skin feeling comfortable.", note: "A little barrier support" },
+  { title: "Cleanse", icon: Droplets, shop: { slug: "soaps", label: "soaps" }, morning: "A fresh start. Gently cleanse without leaving your skin feeling tight.", evening: "Wash away the day. Gently remove sunscreen, makeup and daily buildup.", note: "Keep the water lukewarm" },
+  { title: "Treat", icon: FlaskConical, shop: { slug: "clarifying", label: "clarifying care" }, morning: "An optional moment of targeted care. Choose a treatment that suits your needs.", evening: "Use your chosen treatment as directed. You don’t need to layer every active.", note: "Optional, never obligatory" },
+  { title: "Moisturize", icon: Droplets, shop: { slug: "moisturising", label: "moisturising" }, morning: "Help seal in hydration with a comfortable layer of moisturizer.", evening: "Finish with moisture. Choose a texture that leaves your skin feeling comfortable.", note: "A little barrier support" },
 ];
 
 export function RitualRoutine() {
   const [period, setPeriod] = useState<"morning" | "evening">("morning");
   const reduceMotion = useReducedMotion();
   const morning = period === "morning";
-  const steps = [
+  const steps: Step[] = [
     ...basics.map((step) => ({ ...step, description: step[period] })),
-    ...(morning ? [{ title: "Protect", icon: SunMedium, category: "essentials", description: "Finish with broad-spectrum SPF 30 or higher. Reapply according to its label.", note: "Your final morning step" }] : []),
+    ...(morning ? [{ title: "Protect", icon: SunMedium, description: "Finish with broad-spectrum SPF 30 or higher. Reapply according to its label.", note: "Your final morning step" }] : []),
   ];
 
   return (
@@ -41,7 +44,7 @@ export function RitualRoutine() {
                   <h3 className="mt-8 font-display text-2xl font-semibold">{step.title}</h3>
                   <p className={`mt-3 flex-1 text-sm leading-relaxed ${morning ? "text-[#766571]" : "text-[#d5c5cf]"}`}>{step.description}</p>
                   <p className={`mb-5 mt-6 text-[11px] ${morning ? "text-primary-950" : "text-[#efcdd9]"}`}>{step.note}</p>
-                  <Link href={`/shop?category[]=${step.category}`} className={`inline-flex items-center justify-between border-t pt-4 text-xs font-semibold ${morning ? "border-[#e5d9de]" : "border-[#655360]"}`}>Explore {step.category}<ArrowUpRight size={16} /></Link>
+                  {step.shop && <Link href={`/shop?category=${step.shop.slug}`} className={`inline-flex items-center justify-between border-t pt-4 text-xs font-semibold ${morning ? "border-[#e5d9de]" : "border-[#655360]"}`}>Explore {step.shop.label}<ArrowUpRight size={16} /></Link>}
                 </li>
               ))}
             </ol>

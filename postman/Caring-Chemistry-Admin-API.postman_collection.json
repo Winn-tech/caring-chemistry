@@ -9,7 +9,7 @@
     "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"ChangeThisAdminPassword123!\"\n}" } }, 
     "event": [{ "listen": "test", "script": { "exec": ["pm.environment.set('token', pm.response.json().data.token);"] } }]
    },
-    { "name": "Create category (Sales / General)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/categories", "body": { "mode": "raw", "raw": "{ \"name\": \"Serums\", \"slug\": \"serums\" }" } } },
+    { "name": "Create category (Sales / General)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/categories", "body": { "mode": "raw", "raw": "{ \"name\": \"Body Cream\", \"slug\": \"body-cream\" }" } } },
     { "name": "Create staff account (General only)", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/v1/admin/staff", "body": { "mode": "raw", "raw": "{ \"name\": \"Sales Team\", \"email\": \"sales@example.com\", \"password\": \"ChangeThisSalesPassword123!\", \"role\": \"SALES_TEAM\" }" } } },
     { "name": "Read audit logs (General only)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/v1/admin/audit-logs?limit=50" } },
     { "name": "List paid orders (Sales / General)", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/api/v1/orders?paymentStatus=PAID" } },

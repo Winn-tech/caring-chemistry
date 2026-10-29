@@ -32,8 +32,8 @@ function buildMockProducts(): ProductCardData[] {
   return [
     {
       id: "mock-1",
-      slug: "dew-cream-cleanser",
-      name: "Dew Cream Cleanser",
+      slug: "dew-cleansing-soap",
+      name: "Dew Cleansing Soap",
       descriptor: "A soft, non-stripping cleanse for comfortable skin.",
       imageUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80",
       price: 6800,
@@ -41,12 +41,12 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.8,
       reviewCount: 144,
       badge: "BESTSELLER",
-      categorySlug: "cleansers",
+      categorySlug: "soaps",
     },
     {
       id: "mock-2",
-      slug: "peptide-serum",
-      name: "Peptide Renewal Serum",
+      slug: "clarifying-renewal-lotion",
+      name: "Clarifying Renewal Lotion",
       descriptor: "Targeted support for smoother, brighter-looking skin.",
       imageUrl: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80",
       price: 9400,
@@ -54,7 +54,7 @@ function buildMockProducts(): ProductCardData[] {
       rating: 4.9,
       reviewCount: 208,
       badge: "NEW",
-      categorySlug: "serums",
+      categorySlug: "clarifying",
     },
     {
       id: "mock-3",
@@ -249,8 +249,8 @@ export async function getShopCategories(): Promise<ShopCategory[]> {
   } catch (error) {
     if (!USE_MOCK_FALLBACK) throw error;
     return [
-      { slug: "cleansers", label: "Cleansers" },
-      { slug: "serums", label: "Serums" },
+      { slug: "soaps", label: "Soaps" },
+      { slug: "clarifying", label: "Clarifying" },
       { slug: "moisturizers", label: "Moisturizers" },
       { slug: "body-care", label: "Body Care" },
       { slug: "essentials", label: "Essentials" },

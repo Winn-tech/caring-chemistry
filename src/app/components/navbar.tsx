@@ -28,11 +28,10 @@ const NAV_LINKS = [
     feature: "Shop the essentials",
     children: [
       { label: "Shop All Beauty", href: "/shop", description: "See the full collection" },
-      { label: "Cleansers", href: "/shop?category=cleansers", description: "Daily reset" },
-      { label: "Serums", href: "/shop?category=serums", description: "Targeted support" },
-      { label: "Moisturizers", href: "/shop?category=moisturizers", description: "Comfort and balance" },
-      { label: "Body Care", href: "/shop?category=body-care", description: "Everyday nourishment" },
-      { label: "Essentials", href: "/shop?category=essentials", description: "The core ritual" },
+      { label: "Body Cream", href: "/shop?category=body-cream", description: "Everyday nourishment" },
+      { label: "Soaps", href: "/shop?category=soaps", description: "Daily reset" },
+      { label: "Moisturising", href: "/shop?category=moisturising", description: "Comfort and balance" },
+      { label: "Clarifying", href: "/shop?category=clarifying", description: "A clearer-looking glow" },
     ],
   },
   {

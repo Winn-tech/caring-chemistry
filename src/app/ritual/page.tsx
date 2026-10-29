@@ -21,7 +21,7 @@ const ingredients = [
   { number: "03", name: "Niacinamide", note: "The versatile essential", description: "A form of vitamin B3 used to support the skin barrier and improve the look of uneven tone.", tag: "Balance" },
 ];
 const faqs = [
-  { question: "Do I really need every step?", answer: "No. A gentle cleanser, moisturizer and morning sun protection are a useful starting point. Treatments are optional: add one only when it suits your skin and follow the product instructions." },
+  { question: "Do I really need every step?", answer: "No. Gentle cleansing, a moisturizer and morning sun protection are a useful starting point. Treatments are optional: add one only when it suits your skin and follow the product instructions." },
   { question: "What order should I apply my products in?", answer: "Start with cleansing, then apply any treatment according to its directions, followed by moisturizer. Broad-spectrum SPF 30 or higher is the final skincare step in the morning. Follow its label for application and reapplication." },
   { question: "How do I introduce something new?", answer: "Introduce one product at a time and patch test as directed. Give yourself time to notice how your skin responds. Stop using a product if it causes irritation, and speak with a dermatologist about persistent concerns." },
   { question: "What if my skin feels sensitive?", answer: "Keep your routine simple and choose gentle, fragrance-free options where possible. Avoid adding several active ingredients at once. A dermatologist can help you find a routine for ongoing sensitivity or a skin condition." },

@@ -75,16 +75,16 @@ function getRecommendation(
   products: ProductCardData[],
 ): Recommendation {
   const hydrators = products.filter((product) =>
-    /hydrat|cream|moistur|serum|butter|repair/i.test(product.name),
+    /hydrat|cream|moistur|butter|repair/i.test(product.name),
   );
   const brightening = products.filter((product) =>
-    /serum|bright|vitamin|radiance|glow|repair/i.test(product.name),
+    /bright|vitamin|radiance|glow|repair/i.test(product.name),
   );
   const clarifying = products.filter((product) =>
-    /cleanser|serum|repair|clar|balance|treat/i.test(product.name),
+    /repair|clar|balance|treat/i.test(product.name),
   );
   const barrier = products.filter((product) =>
-    /cream|repair|barrier|moistur|butter|serum/i.test(product.name),
+    /cream|repair|barrier|moistur|butter/i.test(product.name),
   );
 
   const map: Record<string, Recommendation> = {
